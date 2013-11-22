@@ -1,0 +1,27 @@
+Para jugar hacer doble click en "index", el juego se abrirá en el navegador.
+Si te pregunta si quieres desbloquear algún tipo de ejecucion de scripts,
+acepta (depende del navegador que utilices).
+
+
+Controles :
+	Pala de la derecha:
+		arriba: W
+		abajo: S
+
+	Pala de la izquierda:
+		arriba: Flecha arriba
+		abajo: Flecha abajo
+
+
+Pelotas :
+
+  Verde: Pelota de tenis, penaliza 1 punto si traspasa tu meta.
+  Gris: De mayor tamaño que el resto, penaliza 10 puntos si traspasa tu meta.
+  Azul: Si la capturas, resta 10 de tus puntos de penalización.
+  Bola de dragón: Naranja, si la capturas Goku vendrá en tu ayuda.
+  Flor: Blanca, si la capturas, se invertirán tus controles. 
+  Pokeball: Balnca y roja, si la capturas un Snorlax salvaje aparecerá y te 
+            bloqueará el camino hasta que se despierte. Si tienes la mala suerte
+            de que te caiga encima seguramente te desmembrará, una vez se haya 
+            ido tendrás que irte a uno de los bordes del juego y volver a unir tus 
+            pedazos.
