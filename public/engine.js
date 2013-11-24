@@ -13,7 +13,10 @@
 
 // Objeto singleton Game: se guarda una unica instancia del
 // constructor anónimo en el objeto Game
-var Game = new function() {                                                                  
+var Game = new function() { 
+    
+    this.duracion= 60*1000;
+    this.dificultad=2;                                                              
 
     // Inicializa el juego
     this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -129,7 +132,9 @@ var SpriteSheet = new function() {
 
 var TitleScreen = function TitleScreen(title,subtitle,callback) {
     var up = false;
-
+    var updown = false;
+    var upup = false;
+    
     // En cada paso, comprobamos si la tecla ha pasado de no pulsada a
     // pulsada. Si comienza el juego con la tecla pulsada, hay que
     // soltarla y
@@ -149,9 +154,23 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
 	  
     this.step = function(dt) {
         if(!Game.keys['fire']) up = true;
+        if(!Game.keys['down2']) updown = true;
+        if(!Game.keys['up2']) upup = true;
         if(up && Game.keys['fire'] && callback) callback();
+        
+        if (upup && Game.keys['up2'] && Game.dificultad<2){
+            Game.dificultad++;
+            upup= false;
+        }
+        if (updown && Game.keys['down2'] && Game.dificultad>0){
+            Game.dificultad--;
+            updown=false;
+        }
+        
 
     };
+    
+    
 
     this.draw = function(ctx) {
         ctx.fillStyle = "#FFFFFF";
@@ -163,7 +182,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         ctx.font = "bold 20px bangers";
         ctx.fillText(subtitle,Game.width/2,Game.height/2 + 40);
 
-        ctx.fillStyle = "Grey";
+        ctx.fillStyle = "#2E2E2E";
         ctx.textAlign = "center";
 
         ctx.font = "bold 30px bangers";
@@ -171,6 +190,12 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
 
         ctx.font = "bold 30px bangers";
         ctx.fillText(B,Game.width - Game.width/4,Game.height - Game.height/4);
+        
+        ctx.fillStyle = "Grey";
+        ctx.textAlign = "center";
+        ctx.fillText(Game.dificultad,Game.width/2,Game.height - Game.height/4);
+        ctx.font = "bold 15px bangers";
+        ctx.fillText("dificultad:",Game.width/2,Game.height - Game.height/4 - 40);
     };
 };
 
@@ -335,7 +360,7 @@ var GamePoints = function(x) {
 };
 
 var Reloj = function() {
-  var seg = (Duracion/1000)-1;
+  var seg = (Game.duracion/1000)-1;
   
 
   var cuenta= function(){

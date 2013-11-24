@@ -23,6 +23,15 @@ Pelotas :
   Gris: De mayor tamaño que el resto, penaliza 10 puntos si traspasa tu meta.
   Azul: Si la capturas, resta 10 de tus puntos de penalización.
   Bola de dragón: Naranja, si la capturas Goku vendrá en tu ayuda.
-  Flor: Blanca, si la capturas, se invertirán tus controles. 
+  Flor: Blanca, si la capturas, se invertirán tus controles. Si coges más de
+        una se sumarán los efectos, y luego se desharán de uno en uno. 
   Pokeball: Balnca y roja, si la capturas un Snorlax salvaje aparecerá y te 
             bloqueará el camino hasta que se despierte. 
+
+            
+Dificultad:
+  
+  0: Sólo una pelota Verde.
+  1: Se añaden más pelotas Verdes, Gris, Azul, y Bola de dragón. 
+  2: Se añaden pelotas Flor y la Pokeball
+

@@ -1,4 +1,4 @@
-var Duracion= 60*1000;
+
 
 var Snorlax_ch ={
      x:undefined,
@@ -66,28 +66,33 @@ var playGame = function() {
     
     // PELOTAS
 
-    board.add(new Pelota());
-
-     
-    for (var i=1;i<3;i++){
-      setTimeout(function(){(board.add(new Pelota()))},Duracion/20*i);
-	  };
-    var s=Duracion/2;
-	  for (var i=1;i<3;i++){
-	    rand= Math.floor((Math.random()*(s)));
-      setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
-	  };
-    s=Duracion/2;
-  	rand= Math.floor((Math.random()*(s)));
-    setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
     
-    setInterval(function(){(board.add(new Pelota_Negra()))},Duracion/6);
-    setInterval(function(){(board.add(new Pelota_Azul()))},Duracion/5);
-    setInterval(function(){(board.add(new Pelota_DB()))},Duracion/4);
 
- 
+    switch(Game.dificultad){
+        
+
+        case 2:
+            for (var i=1;i<Game.dificultad+1;i++){
+                rand= Math.floor((Math.random()*(Game.duracion/2)));
+                setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
+            };
+          	rand= Math.floor((Math.random()*(Game.duracion/2)));
+            setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
+            
+       case 1:  
+            for (var i=1;i<Game.dificultad+1;i++){
+                setTimeout(function(){(board.add(new Pelota()))},Game.duracion/20*i);
+	        };
+            setInterval(function(){(board.add(new Pelota_Negra()))},Game.duracion/6);
+            setInterval(function(){(board.add(new Pelota_Azul()))},Game.duracion/5);
+            setInterval(function(){(board.add(new Pelota_DB()))},Game.duracion/4);
+            
+        case 0:
+            board.add(new Pelota());
+
+    }
     Game.setBoard(2,board);
-    setTimeout(function(){endGame()},Duracion);
+    setTimeout(function(){endGame()},Game.duracion);
 }
 
 
