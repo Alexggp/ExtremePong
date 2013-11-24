@@ -67,7 +67,7 @@ var playGame = function() {
     
     // PELOTAS
 
-    board.add(new Pelota_Poke());
+    board.add(new Pelota());
 
      
     for (var i=1;i<3;i++){
@@ -100,7 +100,7 @@ var playGame = function() {
 
 
 /////// PLAYER A
-var Pala1PlayerA = function() { 
+var Pala1PlayerA = function() { //Parte central de la pala izquierda
     this.setup('pala1A', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -142,7 +142,7 @@ var Pala1PlayerA = function() {
 Pala1PlayerA.prototype = new Sprite();
 Pala1PlayerA.prototype.type = OBJETO_PALA1;
 
-var Pala2PlayerA = function() { 
+var Pala2PlayerA = function() { //Parte de abajo de la pala izquierda
     this.setup('pala2A', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -150,30 +150,8 @@ var Pala2PlayerA = function() {
     this.y = Game.height/2 + 100/2 - this.h/2;
 
     this.step = function(dt) {
-	  if (ChMod==1){
-	  if(Game.keys['down1']) { this.vy = -this.maxVel; }
-	  else if(Game.keys['up1']) { this.vy = this.maxVel; }
-	  else { this.vy = 0; }
-  }else{
-    if(Game.keys['up1']) { this.vy = -this.maxVel; }
-	  else if(Game.keys['down1']) { this.vy = this.maxVel; }
-	  else { this.vy = 0; }
-	}
-
-	this.y += this.vy * dt;
-
-	if(this.y < 100) { this.y = 100; }
-	else if(this.y > Game.height - this.h) { 
-	    this.y = Game.height - this.h
-	}
-  if(Snorlax_ch.y < this.y && Snorlax_ch.x==0){
-		  if(this.y <  Snorlax_ch.y + 82 + 100) { this.y = Snorlax_ch.y + 82 + 100; }
- }else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
-      if(this.y > Snorlax_ch.y - this.h) { 
-	      this.y = Snorlax_ch.y - this.h
-	      }
-  }
-	this.reload-=dt;
+      this.y= this.board.objects[0].y + this.board.objects[0].h;
+	    this.reload-=dt;
     }
 }
 
@@ -181,7 +159,7 @@ Pala2PlayerA.prototype = new Sprite();
 Pala2PlayerA.prototype.type = OBJETO_PALA2;
 
 
-var Pala3PlayerA = function() { 
+var Pala3PlayerA = function() { // Parte de arriba de la pala izquierda
     this.setup('pala3A', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -189,31 +167,8 @@ var Pala3PlayerA = function() {
     this.y = Game.height/2 - 100/2 - this.h/2;
 
     this.step = function(dt) {
-	  if (ChMod==1){
-	    if(Game.keys['down1']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['up1']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-    }else{
-      if(Game.keys['up1']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['down1']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-	  }
-
-	this.y += this.vy * dt;
-
-	if(this.y < 0) { this.y = 0; }
-	else if(this.y > Game.height - 100 - this.h) { 
-	    this.y = Game.height - 100 - this.h
-	}
-	
-  if(Snorlax_ch.y < this.y && Snorlax_ch.x==0){
-	  if(this.y < Snorlax_ch.y + 82) { this.y = Snorlax_ch.y + 82; }
-	}else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
-	    if(this.y > Snorlax_ch.y - 100 - this.h) { 
-	      this.y = Snorlax_ch.y - 100 - this.h
-	      }
-  }
-	this.reload-=dt;
+      this.y= this.board.objects[0].y - this.h;
+	    this.reload-=dt;
   }
 }
 
@@ -222,7 +177,7 @@ Pala3PlayerA.prototype = new Sprite();
 Pala3PlayerA.prototype.type = OBJETO_PALA2;
 
 ////////// PLAYER B
-var Pala1PlayerB = function() { 
+var Pala1PlayerB = function() { //Parte central de la pala derecha
     this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -262,7 +217,7 @@ var Pala1PlayerB = function() {
 Pala1PlayerB.prototype = new Sprite();
 Pala1PlayerB.prototype.type = OBJETO_PALA1;
 
-var Pala2PlayerB = function() { 
+var Pala2PlayerB = function() { //Parte de abajo de la pala derecha
     this.setup('pala2B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -270,30 +225,8 @@ var Pala2PlayerB = function() {
     this.y = Game.height/2 + 100/2 - this.h/2;
 
     this.step = function(dt) {
-		if (ChMod==2){
-	    if(Game.keys['down2']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['up2']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-    }else{
-      if(Game.keys['up2']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['down2']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-    }
-	this.y += this.vy * dt;
-
-	if(this.y < 100) { this.y = 100; }
-	else if(this.y > Game.height - this.h) { 
-	    this.y = Game.height - this.h
-	}
-  if(Snorlax_ch.y < this.y && Snorlax_ch.x>Game.width/2){
-		    if(this.y <  Snorlax_ch.y + 82 + 100) { this.y = Snorlax_ch.y + 82 + 100; }
-   }else if(Snorlax_ch.y > this.y && Snorlax_ch.x>Game.width/2){
-        if(this.y > Snorlax_ch.y - this.h) { 
-	        this.y = Snorlax_ch.y - this.h
-	        }
-    }
-
-	this.reload-=dt;
+      this.y= this.board.objects[3].y + this.board.objects[3].h;
+	    this.reload-=dt;
     }
 }
 
@@ -301,7 +234,7 @@ Pala2PlayerB.prototype = new Sprite();
 Pala2PlayerB.prototype.type = OBJETO_PALA2;
 
 
-var Pala3PlayerB = function() { 
+var Pala3PlayerB = function() {  //Parte de arriba de la pala derecha
     this.setup('pala3B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -309,30 +242,8 @@ var Pala3PlayerB = function() {
     this.y = Game.height/2 - 100/2 - this.h/2;
 
     this.step = function(dt) {
-		if (ChMod==2){
-	    if(Game.keys['down2']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['up2']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-    }else{
-      if(Game.keys['up2']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['down2']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-	  }
-
-	this.y += this.vy * dt;
-
-	if(this.y < 0) { this.y = 0; }
-	else if(this.y > Game.height - 100 - this.h) { 
-	    this.y = Game.height - 100 - this.h
-	}
-	if(Snorlax_ch.y < this.y && Snorlax_ch.x>Game.width/2){
-	  if(this.y < Snorlax_ch.y + 82) { this.y = Snorlax_ch.y + 82; }
-	}else if(Snorlax_ch.y > this.y && Snorlax_ch.x>Game.width/2){
-	    if(this.y > Snorlax_ch.y - 100 - this.h) { 
-	      this.y = Snorlax_ch.y - 100 - this.h
-	      }
-  }
-	this.reload-=dt;
+      this.y= this.board.objects[3].y - this.h;
+	    this.reload-=dt;
     }
 }
 

@@ -25,7 +25,4 @@ Pelotas :
   Bola de dragón: Naranja, si la capturas Goku vendrá en tu ayuda.
   Flor: Blanca, si la capturas, se invertirán tus controles. 
   Pokeball: Balnca y roja, si la capturas un Snorlax salvaje aparecerá y te 
-            bloqueará el camino hasta que se despierte. Si tienes la mala suerte
-            de que te caiga encima seguramente te desmembrará, una vez se haya 
-            ido tendrás que irte a uno de los bordes del juego y volver a unir tus 
-            pedazos.
+            bloqueará el camino hasta que se despierte. 
