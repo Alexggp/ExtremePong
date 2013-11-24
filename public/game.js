@@ -67,7 +67,7 @@ var playGame = function() {
     
     // PELOTAS
 
-    board.add(new Pelota());
+    board.add(new Pelota_Poke());
 
      
     for (var i=1;i<3;i++){
@@ -170,7 +170,7 @@ var Pala2PlayerA = function() {
 		  if(this.y <  Snorlax_ch.y + 82 + 100) { this.y = Snorlax_ch.y + 82 + 100; }
  }else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
       if(this.y > Snorlax_ch.y - this.h) { 
-	      this.y = Snorlax_ch.y - this.hf
+	      this.y = Snorlax_ch.y - this.h
 	      }
   }
 	this.reload-=dt;
@@ -205,6 +205,7 @@ var Pala3PlayerA = function() {
 	else if(this.y > Game.height - 100 - this.h) { 
 	    this.y = Game.height - 100 - this.h
 	}
+	
   if(Snorlax_ch.y < this.y && Snorlax_ch.x==0){
 	  if(this.y < Snorlax_ch.y + 82) { this.y = Snorlax_ch.y + 82; }
 	}else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
@@ -215,6 +216,7 @@ var Pala3PlayerA = function() {
 	this.reload-=dt;
   }
 }
+
 
 Pala3PlayerA.prototype = new Sprite();
 Pala3PlayerA.prototype.type = OBJETO_PALA2;
