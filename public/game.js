@@ -43,6 +43,7 @@ var OBJETO_PALA1        =   1,
     OBJETO_SNORLAX      = 128;
 	  OBJETO_PELOTA_POKE  = 256;
 	  OBJETO_PELOTA_FLOR  = 512;
+	  OBJETO_PALAUX       =1024;
 
 var endGame = function(){
     Game.setBoard(2,new TitleScreen("Fin del juego!!!!", 
@@ -63,6 +64,7 @@ var playGame = function() {
     board.add(new Pala1PlayerB());
     board.add(new Pala2PlayerB());
     board.add(new Pala3PlayerB());
+
     
     // PELOTAS
 
@@ -70,24 +72,33 @@ var playGame = function() {
 
     switch(Game.dificultad){
         
-
-        case 2:
-            for (var i=1;i<Game.dificultad+1;i++){
+        case 5:
+            if (Game.dificultad == 5){
+                  board.add(new PalauxA());
+                  board.add(new PalauxB());
+            }  
+        case 4:
+            for (var i=1;i<Game.dificultad-1;i++){
                 rand= Math.floor((Math.random()*(Game.duracion/2)));
                 setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
             };
           	rand= Math.floor((Math.random()*(Game.duracion/2)));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
             
-       case 1:  
-            for (var i=1;i<Game.dificultad+1;i++){
+       case 3:  
+            for (var i=1;i<Game.dificultad-1;i++){
                 setTimeout(function(){(board.add(new Pelota()))},Game.duracion/20*i);
-	        };
+	          };
             setInterval(function(){(board.add(new Pelota_Negra()))},Game.duracion/6);
             setInterval(function(){(board.add(new Pelota_Azul()))},Game.duracion/5);
             setInterval(function(){(board.add(new Pelota_DB()))},Game.duracion/4);
-            
-        case 0:
+        
+        case 2:
+            if (Game.dificultad == 2){
+                  board.add(new PalauxA());
+                  board.add(new PalauxB());
+            }   
+        case 1:
             board.add(new Pelota());
 
     }
@@ -168,13 +179,29 @@ var Pala3PlayerA = function() { // Parte de arriba de la pala izquierda
 
     this.step = function(dt) {
         this.y= this.board.objects[0].y - this.h;
-	    this.reload-=dt;
+	      this.reload-=dt;
   }
 }
 
-
 Pala3PlayerA.prototype = new Sprite();
 Pala3PlayerA.prototype.type = OBJETO_PALA2;
+
+
+var PalauxA =function(){ // Pala auxiliar de la pala izquierda (en la derecha)
+    this.setup('pala1A', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
+    
+    this.reload = this.reloadTime;
+    this.x= Game.width - Game.width/3;
+    this.step = function(dt) {
+      this.y= this.board.objects[0].y;
+	    this.reload-=dt;
+  }
+    
+}
+PalauxA.prototype = new Sprite();
+PalauxA.prototype.type = OBJETO_PALAUX;
+
+
 
 ////////// PLAYER B
 var Pala1PlayerB = function() { //Parte central de la pala derecha
@@ -247,6 +274,19 @@ var Pala3PlayerB = function() {  //Parte de arriba de la pala derecha
 Pala3PlayerB.prototype = new Sprite();
 Pala3PlayerB.prototype.type = OBJETO_PALA2;
 
+var PalauxB =function(){ // Pala auxiliar de la pala derecha (en la izquierda)
+    this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
+    
+    this.reload = this.reloadTime;
+    this.x= Game.width/3 + this.w;
+    this.step = function(dt) {
+      this.y= this.board.objects[3].y;
+	    this.reload-=dt;
+  }
+    
+}
+PalauxB.prototype = new Sprite();
+PalauxB.prototype.type = OBJETO_PALAUX;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////// PELOTAS
@@ -303,6 +343,14 @@ Pelota.prototype.step = function(dt) {
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
+    
+    collision = this.board.collide(this,OBJETO_PALAUX);
+    if(collision) {
+        this.vy = -this.vy;
+        this.vx = -this.vx;
+        if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+    }
+    
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
        if (this.x < Game.width/2){
@@ -375,6 +423,13 @@ Pelota_Negra.prototype.step = function(dt) {
        if (this.x < Game.width/2){
           this.x= 34
         }else {this.x=Game.width-34 - this.w};
+        this.vy = -this.vy;
+        this.vx = -this.vx;
+        if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+    }
+    
+    collision = this.board.collide(this,OBJETO_PALAUX);
+    if(collision) {
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -456,6 +511,13 @@ Pelota_Azul.prototype.step = function(dt) {
         this.board.remove(this);
     }
     
+    collision = this.board.collide(this,OBJETO_PALAUX);
+    if(collision) {
+        this.vy = -this.vy;
+        this.vx = -this.vx;
+        if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+    }
+    
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
        if (this.x < Game.width/2){
@@ -525,6 +587,13 @@ Pelota_DB.prototype.step = function(dt) {
           this.board.add(new Goku(1));
         }else {this.board.add(new Goku(2))};
         this.board.remove(this);
+    }
+    
+    collision = this.board.collide(this,OBJETO_PALAUX);
+    if(collision) {
+        this.vy = -this.vy;
+        this.vx = -this.vx;
+        if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
     collision = this.board.collide(this,OBJETO_GOKU);
@@ -618,6 +687,13 @@ Pelota_Poke.prototype.step = function(dt) {
       }
     }
     
+    collision = this.board.collide(this,OBJETO_PALAUX);
+    if(collision) {
+        this.vy = -this.vy;
+        this.vx = -this.vx;
+        if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+    }
+    
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
        if (this.x < Game.width/2){
@@ -695,6 +771,13 @@ Pelota_Flor.prototype.step = function(dt) {
         this.board.remove(this);
         
       }   
+    
+    collision = this.board.collide(this,OBJETO_PALAUX);
+    if(collision) {
+        this.vy = -this.vy;
+        this.vx = -this.vx;
+        if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+    }
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {

@@ -3,7 +3,7 @@ var Game = new function() {
     
     this.segundos=60;
     this.duracion= this.segundos*1000;
-    this.dificultad=2;                                                              
+    this.dificultad=4;                                                              
 
     // Inicializa el juego
     this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -125,11 +125,11 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         
         if(up && Game.keys['fire'] && callback) callback();
         
-        if (upup && Game.keys['up2'] && Game.dificultad<2){
+        if (upup && Game.keys['up2'] && Game.dificultad<5){
             Game.dificultad++;
             upup= false;
         }
-        if (updown && Game.keys['down2'] && Game.dificultad>0){
+        if (updown && Game.keys['down2'] && Game.dificultad>1){
             Game.dificultad--;
             updown=false;
         }
@@ -143,8 +143,6 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
             Game.duracion= Game.segundos*1000;
             upizda=false;
         }
-        
-
     };
     
     

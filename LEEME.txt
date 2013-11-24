@@ -34,6 +34,16 @@ Dificultad:
   Se selecciona en la pantalla principal, pulsando arriba o abajo en el teclado. 
   
   0: Sólo una pelota Verde.
-  1: Se añaden más pelotas Verdes, Gris, Azul, y Bola de dragón. 
-  2: Se añaden pelotas Flor y la Pokeball
-
+  1: Nivel 1 con dos palas por jugador.
+  2: Se añaden más pelotas Verdes, Gris, Azul, y Bola de dragón. 
+  3: Se añaden pelotas Flor y la Pokeball
+  4: Nivel 3 con dos palas por jugador.
+  
+Duración:
+  Se selecciona en la pantalla principal, pulsando derecha o izquierda en el teclado.
+  Duraciones (en segundos): 30, 60, 90 y 120.
+  
+  
+  
+  
+  
