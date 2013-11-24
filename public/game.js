@@ -16,8 +16,8 @@ var sprites = {
     pNegra:   { sx: 90, sy: 0, w: 50, h: 45, frames: 1 },
     pAzul:    { sx: 55, sy: 53, w: 29, h: 29, frames: 1 },
     pDB:      { sx: 56, sy: 25, w: 28, h: 28, frames: 1 },
-	pPokeball:{ sx: 58, sy: 84, w: 27, h: 26, frames: 1 },
-	pflor:    { sx: 100, sy: 46, w: 30, h: 30, frames: 1 },
+	  pPokeball:{ sx: 58, sy: 84, w: 27, h: 26, frames: 1 },
+	  pflor:    { sx: 100, sy: 46, w: 30, h: 30, frames: 1 },
     Goku1:    { sx: 14, sy: 157, w: 57, h: 80, frames: 1 },
     Goku2:    { sx: 67, sy: 157, w: 57, h: 80, frames: 1 },
     corazon:  { sx: 142, sy:0, w: 30, h: 28, frames: 1 },
@@ -41,8 +41,8 @@ var OBJETO_PALA1        =   1,
     OBJETO_PELOTA_DB    =  32,
     OBJETO_GOKU         =  64,
     OBJETO_SNORLAX      = 128;
-	OBJETO_PELOTA_POKE  = 256;
-	OBJETO_PELOTA_FLOR  = 512;
+	  OBJETO_PELOTA_POKE  = 256;
+	  OBJETO_PELOTA_FLOR  = 512;
 
 var endGame = function(){
     Game.setBoard(2,new TitleScreen("Fin del juego!!!!", 

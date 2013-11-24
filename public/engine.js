@@ -1,21 +1,8 @@
-// Alien Invasion utiliza duck typing para implementar como dibujar
-// elementos en la pantalla (método draw()) y para que actualicen su
-// estado cada vez que el bucle de animación marca un nuevo paso
-// (método step()).
-//
-// Estos dos métodos son implementados por: las pantallas iniciales y
-// final del juego, los sprites que se muestran en la pantalla
-// (jugador, enemigo, proyectiles, y los elementos como el marcador de
-// puntuación o el número de vidas.
 
-
-
-
-// Objeto singleton Game: se guarda una unica instancia del
-// constructor anónimo en el objeto Game
 var Game = new function() { 
     
-    this.duracion= 60*1000;
+    this.segundos=60;
+    this.duracion= this.segundos*1000;
     this.dificultad=2;                                                              
 
     // Inicializa el juego
@@ -35,7 +22,7 @@ var Game = new function() {
     };
 
     // Gestión de la entrada (teclas para izda/derecha y disparo)
-    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire' };  
+    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda' };  
     this.keys = {};
 
     this.setupInput = function() {
@@ -72,72 +59,45 @@ var Game = new function() {
 	    }
 	}
 
-	// Ejecutar dentro de 30 ms
 	setTimeout(Game.loop,30);
     };
     
-    // Para cambiar el panel activo en el juego.
-    // Son s: se dibujan de menor num a mayor
-    // Cada capa tiene que tener en su interfaz step() y draw()
-    this.setBoard = function(num,board) { boards[num] = board; };
+   this.setBoard = function(num,board) { boards[num] = board; };
 };
 
 
-// Objeto singleton SpriteSheet: se guarda una unica instancia del
-// constructor anónimo en el objeto SpriteSheet
 var SpriteSheet = new function() {
 
-    // Almacena nombre_de_sprite: rectángulo para que sea mas facil
-    // gestionar los sprites del fichero images/sprite.png
     this.map = { }; 
 
-    // Para cargar hoja de sprites. 
-    //
-    // Parámetros: spriteData: parejas con nombre de sprite, rectángulo
-    // callback: para llamarla cuando se haya cargado la hoja de
-    // sprites
     this.load = function(spriteData,callback) { 
-	this.map = spriteData;
-	this.image = new Image();
-	this.image.onload = callback;
-	this.image.src = 'images/sprites.png';
+    this.map = spriteData;
+    this.image = new Image();
+    this.image.onload = callback;
+    this.image.src = 'images/sprites.png';
     };
 
     
-    // Para dibujar sprites individuales en el contexto de canvas ctx
-    //
-    // Parámetros: contexto, string con nombre de sprite para buscar
-    //  en this.map, x e y en las que dibujarlo, y opcionalmente,
-    //  frame para seleccionar el frame de un sprite que tenga varios
-    //  como la explosion
     this.draw = function(ctx,sprite,x,y,frame) {
-	var s = this.map[sprite];
-	if(!frame) frame = 0;
-	ctx.drawImage(this.image,
-                      s.sx + frame * s.w, 
-                      s.sy, 
-                      s.w, s.h, 
-                      Math.floor(x), Math.floor(y),
-                      s.w, s.h);
+    var s = this.map[sprite];
+    if(!frame) frame = 0;
+    ctx.drawImage(this.image,
+                        s.sx + frame * s.w, 
+                        s.sy, 
+                        s.w, s.h, 
+                        Math.floor(x), Math.floor(y),
+                        s.w, s.h);
     };
 }
 
-// La clase TitleScreen ofrece la interfaz step(), draw() para que
-// pueda ser mostrada desde el bucle principal del juego
-
-// Usa fillText, con el siguiente font enlazado en index.html <link
-// href='http://fonts.googleapis.com/css?family=Bangers'
-// rel='stylesheet' type='text/css'> Otros fonts:
-// http://www.google.com/fonts
 
 var TitleScreen = function TitleScreen(title,subtitle,callback) {
     var up = false;
     var updown = false;
     var upup = false;
+    var updcha= false;
+    var upizda= false;
     
-    // En cada paso, comprobamos si la tecla ha pasado de no pulsada a
-    // pulsada. Si comienza el juego con la tecla pulsada, hay que
-    // soltarla y
     
     if (Game.points1<Game.points2){
         var A = "GANADOR";
@@ -146,6 +106,10 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
     else if(Game.points1>Game.points2){
         var B = "GANADOR";
         var A = "PERDEDOR";
+    }
+    else if(Game.points1=Game.points2>0){
+        var B = "EMPATE";
+        var A = "EMPATE";
     }
     else{
         var A="";
@@ -156,6 +120,9 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         if(!Game.keys['fire']) up = true;
         if(!Game.keys['down2']) updown = true;
         if(!Game.keys['up2']) upup = true;
+        if(!Game.keys['dcha']) updcha = true;
+        if(!Game.keys['izda']) upizda = true;
+        
         if(up && Game.keys['fire'] && callback) callback();
         
         if (upup && Game.keys['up2'] && Game.dificultad<2){
@@ -165,6 +132,16 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         if (updown && Game.keys['down2'] && Game.dificultad>0){
             Game.dificultad--;
             updown=false;
+        }
+        if (updcha && Game.keys['dcha'] && Game.segundos<120){
+            Game.segundos+=30;
+            Game.duracion= Game.segundos*1000;
+            updcha= false;
+        }
+        if (upizda && Game.keys['izda'] && Game.segundos>30){
+            Game.segundos-=30;
+            Game.duracion= Game.segundos*1000;
+            upizda=false;
         }
         
 
@@ -193,43 +170,30 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         
         ctx.fillStyle = "Grey";
         ctx.textAlign = "center";
+        ctx.fillText(Game.segundos+"\'\'",Game.width/2,Game.height - Game.height/4 +80);
         ctx.fillText(Game.dificultad,Game.width/2,Game.height - Game.height/4);
         ctx.font = "bold 15px bangers";
         ctx.fillText("dificultad:",Game.width/2,Game.height - Game.height/4 - 40);
+        ctx.fillText("duracion:",Game.width/2,Game.height - Game.height/4 + 40);
     };
 };
 
 
 
-// GameBoard implementa un tablero de juego que gestiona la
-// interacción entre los elementos del juego sobre el que se disponen
-// los elementos del juego (fichas, cartas, naves, proyectiles, etc.)
-
-// La clase GameBoard ofrece la interfaz step(), draw() para que sus
-// elementos puedan ser mostrados desde el bucle principal del juego.
-
 var GameBoard = function() {
     var board = this;
 
-    // Colección de objetos contenidos por este tablero
     this.objects = [];
 
-    // Añade obj a objects
+
     this.add = function(obj) { 
-	obj.board=this;  // Para que obj pueda referenciar el tablero
-	this.objects.push(obj); 
-	return obj; 
+	    obj.board=this; 
+	    this.objects.push(obj); 
+	    return obj; 
     };
 
-    // Los siguientes 3 métodos gestionan el borrado.  Cuando un board
-    // está siendo recorrido (en step()) podría eliminarse algún
-    // objeto, lo que interferiría en el recorrido. Por ello borrar se
-    // hace en dos fases: marcado, y una vez terminado el recorrido,
-    // se modifica objects.
-
-    // Marcar un objeto para borrar
     this.remove = function(obj) { 
-	this.removed.push(obj); 
+	      this.removed.push(obj); 
     };
 
     // Inicializar la lista de objetos pendientes de ser borrados
@@ -237,73 +201,55 @@ var GameBoard = function() {
 
     // Elimina de objects los objetos pendientes de ser borrados
     this.finalizeRemoved = function() {
-	for(var i=0, len=this.removed.length; i<len;i++) {
-	    // Buscamos qué índice tiene en objects[] el objeto i de
-	    // removed[]
-	    var idx = this.objects.indexOf(this.removed[i]);
-
-	    // splice elimina de objects el objeto en la posición idx
-	    if(idx != -1) this.objects.splice(idx,1); 
-	}
+	      for(var i=0, len=this.removed.length; i<len;i++) {  
+	          var idx = this.objects.indexOf(this.removed[i]);
+	          if(idx != -1) this.objects.splice(idx,1); 
+	      }
     }
 
 
-    // Iterador que aplica el método funcName a todos los
-    // objetos de objects
+    
     this.iterate = function(funcName) {
-	// Convertimos en un array args (1..)
-	var args = Array.prototype.slice.call(arguments,1);
+	    var args = Array.prototype.slice.call(arguments,1);
 
-	for(var i=0, len=this.objects.length; i<len;i++) {
-	    var obj = this.objects[i];
-	    obj[funcName].apply(obj,args)
-	}
+	    for(var i=0, len=this.objects.length; i<len;i++) {
+	        var obj = this.objects[i];
+	        obj[funcName].apply(obj,args)
+	    }
 
     };
 
     // Devuelve el primer objeto de objects para el que func es true
     this.detect = function(func) {
-	for(var i = 0,val=null, len=this.objects.length; i < len; i++) {
-	    if(func.call(this.objects[i])) return this.objects[i];
-	}
-	return false;
+	      for(var i = 0,val=null, len=this.objects.length; i < len; i++) {
+	          if(func.call(this.objects[i])) return this.objects[i];
+	      }
+	      return false;
     };
 
-    // Cuando Game.loop() llame a step(), hay que llamar al método
-    // step() de todos los objetos contenidos en el tablero.  Antes se
-    // inicializa la lista de objetos pendientes de borrar, y después
-    // se borran los que hayan aparecido en dicha lista
     this.step = function(dt) { 
-	this.resetRemoved();
-	this.iterate('step',dt);
-	this.finalizeRemoved();
+	      this.resetRemoved();
+	      this.iterate('step',dt);
+	      this.finalizeRemoved();
     };
 
-    // Cuando Game.loop() llame a draw(), hay que llamar al método
-    // draw() de todos los objetos contenidos en el tablero
     this.draw= function(ctx) {
-	this.iterate('draw',ctx);
+	      this.iterate('draw',ctx);
     };
 
-    // Comprobar si hay intersección entre los rectángulos que
-    // circunscriben a los objetos o1 y o2
+    
     this.overlap = function(o1,o2) {
-	// return !((o1 encima de o2)    || (o1 debajo de o2)   ||
-        //          (o1 a la izda de o2) || (o1 a la dcha de o2)
-	return !((o1.y+o1.h-1<o2.y) || (o1.y>o2.y+o2.h-1) ||
+	  return !((o1.y+o1.h-1<o2.y) || (o1.y>o2.y+o2.h-1) ||
 		 (o1.x+o1.w-1<o2.x) || (o1.x>o2.x+o2.w-1));
     };
 
-    // Encontrar el primer objeto de tipo type que colisiona con obj
-    // Si se llama sin type, en contrar el primer objeto de cualquier
-    // tipo que colisiona con obj
     this.collide = function(obj,type) {
-	return this.detect(function() {
-	    if(obj != this) {
-		var col = (!type || this.type & type) && board.overlap(obj,this)
-		return col ? this : false;
-	    }
-	});
+	      return this.detect(function() {
+	          if(obj != this) {
+		            var col = (!type || this.type & type) && board.overlap(obj,this)
+		            return col ? this : false;
+	          }
+	      });
     };
 
 
@@ -323,9 +269,9 @@ Sprite.prototype.setup = function(sprite,props) {
 
 Sprite.prototype.merge = function(props) {
     if(props) {
-	for (var prop in props) {
-	    this[prop] = props[prop];
-	}
+	      for (var prop in props) {
+	          this[prop] = props[prop];
+	      }
     }
 }
 
@@ -361,7 +307,7 @@ var GamePoints = function(x) {
 
 var Reloj = function() {
   var seg = (Game.duracion/1000)-1;
-  
+
 
   var cuenta= function(){
     seg--;

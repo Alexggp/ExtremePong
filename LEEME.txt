@@ -31,6 +31,8 @@ Pelotas :
             
 Dificultad:
   
+  Se selecciona en la pantalla principal, pulsando arriba o abajo en el teclado. 
+  
   0: Sólo una pelota Verde.
   1: Se añaden más pelotas Verdes, Gris, Azul, y Bola de dragón. 
   2: Se añaden pelotas Flor y la Pokeball
