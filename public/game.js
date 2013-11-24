@@ -4,7 +4,6 @@ var Snorlax_ch ={
      x:undefined,
      y:undefined
 }
-var ChMod=0;
 
 var sprites = {
     pala1A:   { sx: 0, sy: 32, w: 24, h: 68, frames: 1 },
@@ -17,8 +16,8 @@ var sprites = {
     pNegra:   { sx: 90, sy: 0, w: 50, h: 45, frames: 1 },
     pAzul:    { sx: 55, sy: 53, w: 29, h: 29, frames: 1 },
     pDB:      { sx: 56, sy: 25, w: 28, h: 28, frames: 1 },
-	  pPokeball:{ sx: 58, sy: 84, w: 27, h: 26, frames: 1 },
-	  pflor:    { sx: 100, sy: 46, w: 30, h: 30, frames: 1 },
+	pPokeball:{ sx: 58, sy: 84, w: 27, h: 26, frames: 1 },
+	pflor:    { sx: 100, sy: 46, w: 30, h: 30, frames: 1 },
     Goku1:    { sx: 14, sy: 157, w: 57, h: 80, frames: 1 },
     Goku2:    { sx: 67, sy: 157, w: 57, h: 80, frames: 1 },
     corazon:  { sx: 142, sy:0, w: 30, h: 28, frames: 1 },
@@ -42,8 +41,8 @@ var OBJETO_PALA1        =   1,
     OBJETO_PELOTA_DB    =  32,
     OBJETO_GOKU         =  64,
     OBJETO_SNORLAX      = 128;
-	  OBJETO_PELOTA_POKE  = 256;
-	  OBJETO_PELOTA_FLOR  = 512;
+	OBJETO_PELOTA_POKE  = 256;
+	OBJETO_PELOTA_FLOR  = 512;
 
 var endGame = function(){
     Game.setBoard(2,new TitleScreen("Fin del juego!!!!", 
@@ -52,8 +51,8 @@ var endGame = function(){
 }
 
 var playGame = function() {
-	Game.setBoard(1,new GamePoints(0));
-	Game.setBoard(3,new Reloj());
+	  Game.setBoard(1,new GamePoints(0));
+	  Game.setBoard(3,new Reloj());
     var board = new GameBoard();
 
 
@@ -109,32 +108,28 @@ var Pala1PlayerA = function() { //Parte central de la pala izquierda
 
     this.step = function(dt) {
     
-  if (ChMod==1){
-	  if(Game.keys['down1']) { this.vy = -this.maxVel; }
-	  else if(Game.keys['up1']) { this.vy = this.maxVel; }
-	  else { this.vy = 0; }
-  }else{
-    if(Game.keys['up1']) { this.vy = -this.maxVel; }
-	  else if(Game.keys['down1']) { this.vy = this.maxVel; }
-	  else { this.vy = 0; }
-	}
-	
-	this.y += this.vy * dt;
 
-	if(this.y < 32) { this.y = 32; }
-	else if(this.y > Game.height - 32 - this.h) { 
-	    this.y = Game.height -32 - this.h
-	}
+        if(Game.keys['down1']) { this.vy = this.maxVel; }
+        else if(Game.keys['up1']) { this.vy = -this.maxVel; }
+        else { this.vy = 0; }
 	
-	if(Snorlax_ch.y < this.y && Snorlax_ch.x==0){
-		  if(this.y < Snorlax_ch.y + 82 + 32) { this.y = Snorlax_ch.y + 82 + 32; }
-	}else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
-	    if(this.y > Snorlax_ch.y - 32 - this.h) { 
-	      this.y = Snorlax_ch.y - 32 - this.h
-	 }
-	}
+	    this.y += this.vy * dt;
 
-	this.reload-=dt;
+	    if(this.y < 32) { this.y = 32; }
+	    else if(this.y > Game.height - 32 - this.h) { 
+	        this.y = Game.height -32 - this.h
+	    }
+	
+	    if(Snorlax_ch.y < this.y && Snorlax_ch.x==0){
+		    if(this.y < Snorlax_ch.y + 82 + 32) { this.y = Snorlax_ch.y + 82 + 32; }
+	    }
+        else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
+            if(this.y > Snorlax_ch.y - 32 - this.h) { 
+            this.y = Snorlax_ch.y - 32 - this.h
+            }
+        }
+
+	    this.reload-=dt;
 
     }
 }
@@ -150,7 +145,7 @@ var Pala2PlayerA = function() { //Parte de abajo de la pala izquierda
     this.y = Game.height/2 + 100/2 - this.h/2;
 
     this.step = function(dt) {
-      this.y= this.board.objects[0].y + this.board.objects[0].h;
+        this.y= this.board.objects[0].y + this.board.objects[0].h;
 	    this.reload-=dt;
     }
 }
@@ -167,7 +162,7 @@ var Pala3PlayerA = function() { // Parte de arriba de la pala izquierda
     this.y = Game.height/2 - 100/2 - this.h/2;
 
     this.step = function(dt) {
-      this.y= this.board.objects[0].y - this.h;
+        this.y= this.board.objects[0].y - this.h;
 	    this.reload-=dt;
   }
 }
@@ -178,39 +173,36 @@ Pala3PlayerA.prototype.type = OBJETO_PALA2;
 
 ////////// PLAYER B
 var Pala1PlayerB = function() { //Parte central de la pala derecha
-    this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
+  this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
-    this.reload = this.reloadTime;
-    this.x = Game.width - 10 - this.w;
-    this.y = Game.height/2 - this.h/2;
+  this.reload = this.reloadTime;
+  this.x = Game.width - 10 - this.w;
+  this.y = Game.height/2 - this.h/2;
 
-    this.step = function(dt) {
-	if (ChMod==2){
-	    if(Game.keys['down2']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['up2']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-    }else{
-      if(Game.keys['up2']) { this.vy = -this.maxVel; }
-	    else if(Game.keys['down2']) { this.vy = this.maxVel; }
-	    else { this.vy = 0; }
-	  }
-	this.y += this.vy * dt;
+  this.step = function(dt) {
 
-	if(this.y < 32) { this.y = 32; }
-	else if(this.y > Game.height - 32 - this.h) { 
-	    this.y = Game.height -32 - this.h
-	}
-	if(Snorlax_ch.y < this.y && Snorlax_ch.x>Game.width/2){
-		  if(this.y < Snorlax_ch.y + 82 + 32) { this.y = Snorlax_ch.y + 82 + 32; }
-	}else if(Snorlax_ch.y > this.y && Snorlax_ch.x>Game.width/2){
-	    if(this.y > Snorlax_ch.y - 32 - this.h) { 
-	      this.y = Snorlax_ch.y - 32 - this.h
-	 }
-	}
+    if(Game.keys['down2']) { this.vy = this.maxVel; }
+    else if(Game.keys['up2']) { this.vy = -this.maxVel; }
+    else { this.vy = 0; }
+      
+    this.y += this.vy * dt;
 
-	this.reload-=dt;
-
+    if(this.y < 32) { this.y = 32; }
+    else if(this.y > Game.height - 32 - this.h) { 
+        this.y = Game.height -32 - this.h
     }
+    if(Snorlax_ch.y < this.y && Snorlax_ch.x>Game.width/2){
+        if(this.y < Snorlax_ch.y + 82 + 32) { this.y = Snorlax_ch.y + 82 + 32; }
+    }
+    else if(Snorlax_ch.y > this.y && Snorlax_ch.x>Game.width/2){
+        if(this.y > Snorlax_ch.y - 32 - this.h) { 
+            this.y = Snorlax_ch.y - 32 - this.h
+        }
+    }
+
+    this.reload-=dt;
+
+  }
 }
 
 // Heredamos del prototipo new Sprite()
@@ -602,28 +594,11 @@ Pelota_Poke.prototype.step = function(dt) {
 	  }
 
     var collision = this.board.collide(this,OBJETO_PALA1);
-    if(collision) {
+    var collision2 = this.board.collide(this,OBJETO_PALA2);
+    if(collision || collision2) {
       if (!Snorlax_ch.y){
         var oy= Math.floor((Math.random()*(Game.height - 82 ))+(10));
         
-        Snorlax_ch.y=oy;
-        if (this.x < Game.width/2){
-          Snorlax_ch.x=0;
-          this.board.add(new Snorlax());
-          this.board.add(new Cetas(Snorlax_ch.x+37,Snorlax_ch.y - 20));
-        }else {
-           Snorlax_ch.x=Game.width - 101;
-           this.board.add(new Snorlax());
-           this.board.add(new Cetas(Snorlax_ch.x+37,Snorlax_ch.y - 20));
-        };
-        this.board.remove(this);
-      }
-    }
-    
-    collision = this.board.collide(this,OBJETO_PALA2);
-    if(collision) {
-      if (!Snorlax_ch.y){ 
-        var oy= Math.floor((Math.random()*(Game.height - 82 ))+(10));
         Snorlax_ch.y=oy;
         if (this.x < Game.width/2){
           Snorlax_ch.x=0;
@@ -702,29 +677,19 @@ Pelota_Flor.prototype.step = function(dt) {
 	  }
 
     var collision = this.board.collide(this,OBJETO_PALA1);
-    if(collision) {
-     
+    var collision2 = this.board.collide(this,OBJETO_PALA2);
+    if(collision || collision2) {
+        var tablero = this.board;
         if (this.x < Game.width/2){
-          ChMod=1;
+          this.board.objects[0].maxVel=-this.board.objects[0].maxVel;
+          setTimeout(function(){tablero.objects[0].maxVel=-tablero.objects[0].maxVel;},7000);
         }else {
-          ChMod=2;
+          this.board.objects[3].maxVel=-this.board.objects[3].maxVel;
+          setTimeout(function(){tablero.objects[3].maxVel=-tablero.objects[3].maxVel;},7000);
         };
         this.board.remove(this);
-        setTimeout(function(){ChMod=0;},7000);
-      }
         
-    collision = this.board.collide(this,OBJETO_PALA2);
-    if(collision) {
-     
-        if (this.x < Game.width/2){
-          ChMod=1;
-        }else {
-          ChMod=2;
-        };
-        this.board.remove(this);
-        setTimeout(function(){ChMod=0;},7000);
-      }
-    
+      }   
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
