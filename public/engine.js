@@ -133,20 +133,44 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
     // En cada paso, comprobamos si la tecla ha pasado de no pulsada a
     // pulsada. Si comienza el juego con la tecla pulsada, hay que
     // soltarla y
+    
+    if (Game.points1<Game.points2){
+        var A = "GANADOR";
+        var B = "PERDEDOR";
+    }
+    else if(Game.points1>Game.points2){
+        var B = "GANADOR";
+        var A = "PERDEDOR";
+    }
+    else{
+        var A="";
+        var B="";
+    }
+	  
     this.step = function(dt) {
-	if(!Game.keys['fire']) up = true;
-	if(up && Game.keys['fire'] && callback) callback();
+        if(!Game.keys['fire']) up = true;
+        if(up && Game.keys['fire'] && callback) callback();
+
     };
 
     this.draw = function(ctx) {
-	ctx.fillStyle = "#FFFFFF";
-	ctx.textAlign = "center";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "center";
 
-	ctx.font = "bold 40px bangers";
-	ctx.fillText(title,Game.width/2,Game.height/2);
+        ctx.font = "bold 40px bangers";
+        ctx.fillText(title,Game.width/2,Game.height/2);
 
-	ctx.font = "bold 20px bangers";
-	ctx.fillText(subtitle,Game.width/2,Game.height/2 + 40);
+        ctx.font = "bold 20px bangers";
+        ctx.fillText(subtitle,Game.width/2,Game.height/2 + 40);
+
+        ctx.fillStyle = "Grey";
+        ctx.textAlign = "center";
+
+        ctx.font = "bold 30px bangers";
+        ctx.fillText(A,Game.width/4,Game.height - Game.height/4);
+
+        ctx.font = "bold 30px bangers";
+        ctx.fillText(B,Game.width - Game.width/4,Game.height - Game.height/4);
     };
 };
 
