@@ -1,7 +1,7 @@
 
 var Game = new function() { 
     
-    this.segundos=60;
+    this.segundos=10;
     this.duracion= this.segundos*1000;
     this.dificultad=1;                                                              
 
@@ -107,7 +107,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         var B = "GANADOR";
         var A = "PERDEDOR";
     }
-    else if(Game.points1=Game.points2>0){
+    else if(Game.points1==Game.points2 && Game.points1!=undefined){
         var B = "EMPATE";
         var A = "EMPATE";
     }
