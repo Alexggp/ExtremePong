@@ -9,11 +9,11 @@ entra en la dirección "localhost:3000").
 
 Controles :
 
-	Pala de la derecha:
+	Pala de la izquierda:
 		arriba: W
 		abajo: S
 
-	Pala de la izquierda:
+	Pala de la derecha:
 		arriba: Flecha arriba
 		abajo: Flecha abajo
 
@@ -26,7 +26,7 @@ Pelotas :
   Bola de dragón: Naranja, si la capturas Goku vendrá en tu ayuda.
   Flor: Blanca, si la capturas, se invertirán tus controles. Si coges más de
         una se sumarán los efectos, y luego se desharán de uno en uno. 
-  Pokeball: Balnca y roja, si la capturas un Snorlax salvaje aparecerá y te 
+  Pokeball: Blanca y roja, si la capturas un Snorlax salvaje aparecerá y te 
             bloqueará el camino hasta que se despierte. 
 
             
