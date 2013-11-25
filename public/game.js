@@ -22,7 +22,7 @@ var sprites = {
 
 var startGame = function() {
     Game.setBoard(0,new capaClear(0));
-    Game.setBoard(2,new TitleScreen("TENIS", 
+    Game.setBoard(2,new TitleScreen("Alex extreme pong", 
                                     "Aprieta espacio para jugar!",
                                     playGame));
 }
