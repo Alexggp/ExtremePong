@@ -70,19 +70,22 @@ var playGame = function() {
                   board.add(new PalauxA());
                   board.add(new PalauxB());                 
             }  
-            rand= Math.floor((Math.random()*(Game.duracion)+Game.duracion/2));
-            setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
+
         case 4:
-            for (var i=1;i<Game.dificultad-1;i++){
-                rand= Math.floor((Math.random()*(Game.duracion)));
-                setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
-            };
+
           	rand= Math.floor((Math.random()*(Game.duracion)));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
-            rand= Math.floor((Math.random()*(Game.duracion)));
+            rand= Math.floor((Math.random()*Game.duracion));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
             
        case 3:  
+            for (var i=1;i<Game.dificultad;i++){
+                rand= Math.floor((Math.random()*(Game.duracion)));
+                setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
+            };
+            rand= Math.floor((Math.random()*(Game.duracion)));
+            setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
+            
             for (var i=1;i<Game.dificultad-1;i++){
                 setTimeout(function(){(board.add(new Pelota()))},Game.duracion/20*i);
 	          };
@@ -115,7 +118,6 @@ var Pala1PlayerA = function() { //Parte central de la pala izquierda
     this.reload = this.reloadTime;
     this.x =  10;
     this.y = Game.height/2 - this.h/2;
-    console.log(this.y,this.y+this.h);
 
     this.step = function(dt) {
     
@@ -272,7 +274,7 @@ PalauxB.prototype.type = OBJETO_PALAUX;
 
 //////////////// PELOTA NORMAL
 var Pelota = function(){
-    this.setup('pelota', {vx:100, vy:100,frame: 0, reloadTime: 0.25, maxVel: 500 });
+    this.setup('pelota', {vx:110, vy:100,frame: 0, reloadTime: 0.25, maxVel: 500 });
     
     randx= Math.floor((Math.random()*this.vx)+(this.vx-10));
     randy= Math.floor((Math.random()*this.vy)+(this.vy-20));
@@ -597,7 +599,6 @@ Pelota_DB.prototype.step = function(dt) {
 ///////////////////// PELOTA POKEMON
 var Pelota_Poke = function(){
     this.setup('pPokeball', {vx:80, vy:80,frame: 0, reloadTime: 0.25, maxVel: 500 });
-    
     randx= Math.floor((Math.random()*this.vx)+(this.vx-10));
     randy= Math.floor((Math.random()*this.vy)+(this.vy-20));
     var rand = Math.random() < 0.5 ? -1 : 1;
