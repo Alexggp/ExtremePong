@@ -1,4 +1,4 @@
-Para jugar hacer doble click en "index", el juego se abrirá en el navegador.
+Para jugar hacer doble click en "public/index", el juego se abrirá en el navegador.
 Si te pregunta si quieres desbloquear algún tipo de ejecucion de scripts,
 acepta (depende del navegador que utilices).
 
