@@ -39,11 +39,11 @@ var OBJETO_PALA1        =   1,
     OBJETO_PELOTA_NEGRA =   8,
     OBJETO_PELOTA_AZUL  =  16,
     OBJETO_PELOTA_DB    =  32,
-    OBJETO_GOKU         =  64,
+    OBJETO_PALAUX       =  64,
     OBJETO_SNORLAX      = 128;
 	  OBJETO_PELOTA_POKE  = 256;
 	  OBJETO_PELOTA_FLOR  = 512;
-	  OBJETO_PALAUX       =1024;
+
 
 var endGame = function(){
     Game.setBoard(2,new TitleScreen("Fin del juego!!!!", 
@@ -99,16 +99,13 @@ var playGame = function() {
                   board.add(new PalauxB());
             }   
         case 1:
-            board.add(new Pelota());
+            board.add(new Pelota_Poke());
 
     }
     Game.setBoard(2,board);
     setTimeout(function(){endGame()},Game.duracion);
 }
 
-
-// Si se construye con clear==true no se pintan estrellas con fondo
-// transparente, sino fondo en negro
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// PALAS!!
@@ -278,7 +275,7 @@ var PalauxB =function(){ // Pala auxiliar de la pala derecha (en la izquierda)
     this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
     
     this.reload = this.reloadTime;
-    this.x= Game.width/3 + this.w;
+    this.x= Game.width/3 - this.w;
     this.step = function(dt) {
       this.y= this.board.objects[3].y;
 	    this.reload-=dt;
@@ -351,7 +348,7 @@ Pelota.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_GOKU);
+    collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -434,7 +431,7 @@ Pelota_Negra.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_GOKU);
+    collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -518,7 +515,7 @@ Pelota_Azul.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_GOKU);
+    collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -597,7 +594,7 @@ Pelota_DB.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_GOKU);
+    collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -667,22 +664,23 @@ Pelota_Poke.prototype.step = function(dt) {
 	    if (this.vx<= this.maxVel){this.vx=this.vx*1.05};  
 	  }
 
-    var collision = this.board.collide(this,OBJETO_PALA1);
-    var collision2 = this.board.collide(this,OBJETO_PALA2);
-    if(collision || collision2) {
+    var coll = this.board.collide(this,OBJETO_PALA1);
+    var coll2 = this.board.collide(this,OBJETO_PALA2);
+    if(coll || coll2) {
       if (!Snorlax_ch.y){
         var oy= Math.floor((Math.random()*(Game.height - 82 ))+(10));
         
         Snorlax_ch.y=oy;
-        if (this.x < Game.width/2){
+        if (coll.sprite == "pala1A" || coll2.sprite =="pala2A" || coll2.sprite=="pala3A"){
           Snorlax_ch.x=0;
           this.board.add(new Snorlax());
           this.board.add(new Cetas(Snorlax_ch.x+37,Snorlax_ch.y - 20));
-        }else {
+        }
+        else if(coll.sprite == "pala1B" || coll2.sprite =="pala2B"|| coll2.sprite=="pala3B"){
            Snorlax_ch.x=Game.width - 101;
            this.board.add(new Snorlax());
            this.board.add(new Cetas(Snorlax_ch.x+37,Snorlax_ch.y - 20));
-        };
+        }
         this.board.remove(this);
       }
     }
@@ -696,7 +694,7 @@ Pelota_Poke.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_GOKU);
+    collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -758,14 +756,15 @@ Pelota_Flor.prototype.step = function(dt) {
 	    if (this.vx<= this.maxVel){this.vx=this.vx*1.08};  
 	  }
 
-    var collision = this.board.collide(this,OBJETO_PALA1);
-    var collision2 = this.board.collide(this,OBJETO_PALA2);
-    if(collision || collision2) {
+    var coll = this.board.collide(this,OBJETO_PALA1);
+    var coll2 = this.board.collide(this,OBJETO_PALA2);
+    if(coll || coll2) {
         var tablero = this.board;
-        if (this.x < Game.width/2){
+        if (coll.sprite == "pala1A" || coll2.sprite =="pala2A" || coll2.sprite=="pala3A"){
           this.board.objects[0].maxVel=-this.board.objects[0].maxVel;
           setTimeout(function(){tablero.objects[0].maxVel=-tablero.objects[0].maxVel;},7000);
-        }else {
+        }
+        else if(coll.sprite == "pala1B" || coll2.sprite =="pala2B"|| coll2.sprite=="pala3B"){
           this.board.objects[3].maxVel=-this.board.objects[3].maxVel;
           setTimeout(function(){tablero.objects[3].maxVel=-tablero.objects[3].maxVel;},7000);
         };
@@ -782,7 +781,7 @@ Pelota_Flor.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_GOKU);
+    collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -828,7 +827,7 @@ var Goku = function(player){
 }
 // Heredamos del prototipo new Sprite()
 Goku.prototype = new Sprite();
-Goku.prototype.type = OBJETO_GOKU;
+Goku.prototype.type = OBJETO_PALAUX;
 
 
 

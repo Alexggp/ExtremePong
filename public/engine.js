@@ -3,7 +3,7 @@ var Game = new function() {
     
     this.segundos=60;
     this.duracion= this.segundos*1000;
-    this.dificultad=4;                                                              
+    this.dificultad=1;                                                              
 
     // Inicializa el juego
     this.initialize = function(canvasElementId,sprite_data,callback) {
