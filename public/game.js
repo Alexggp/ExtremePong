@@ -50,7 +50,7 @@ var playGame = function() {
     var board = new GameBoard();
 
 
-    // PALAS DE JUGADORES
+    // PALAS DE JUGADORES             Si se modifica el orden de las palas se modifican las referencias.
     board.add(new Pala1PlayerA());
     board.add(new Pala2PlayerA());
     board.add(new Pala3PlayerA());
@@ -68,14 +68,18 @@ var playGame = function() {
         case 5:
             if (Game.dificultad == 5){
                   board.add(new PalauxA());
-                  board.add(new PalauxB());
+                  board.add(new PalauxB());                 
             }  
+            rand= Math.floor((Math.random()*(Game.duracion)+Game.duracion/2));
+            setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
         case 4:
             for (var i=1;i<Game.dificultad-1;i++){
-                rand= Math.floor((Math.random()*(Game.duracion/2)));
+                rand= Math.floor((Math.random()*(Game.duracion)));
                 setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
             };
-          	rand= Math.floor((Math.random()*(Game.duracion/2)));
+          	rand= Math.floor((Math.random()*(Game.duracion)));
+            setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
+            rand= Math.floor((Math.random()*(Game.duracion)));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
             
        case 3:  
@@ -111,6 +115,7 @@ var Pala1PlayerA = function() { //Parte central de la pala izquierda
     this.reload = this.reloadTime;
     this.x =  10;
     this.y = Game.height/2 - this.h/2;
+    console.log(this.y,this.y+this.h);
 
     this.step = function(dt) {
     
@@ -838,6 +843,33 @@ var Snorlax = function(ox,oy){
   	  	
   	this.borrar=0;
     this.step = function(dt) {
+    
+    
+    //Restricciones de movimiento de las palas al chocar con snorlax
+    if (this.x==0 && this.board.objects[0].y > this.y-100 && this.board.objects[0].y < this.y+this.h/2){
+
+        this.board.objects[0].y= this.y-100;
+        this.board.objects[1].y= this.y-32;
+        this.board.objects[2].y= this.y-132;
+    }
+    if (this.x==0 && this.board.objects[0].y < this.y +this.h +32 && this.board.objects[0].y > this.y+this.h/2){
+        this.board.objects[0].y= this.y+this.h+32;
+        this.board.objects[1].y= this.y+this.h+100;
+        this.board.objects[2].y= this.y+this.h;
+    }
+    
+    if (this.x==Game.width-this.w && this.board.objects[3].y > this.y-100 && this.board.objects[3].y < this.y+this.h/2){
+
+        this.board.objects[3].y= this.y-100;
+        this.board.objects[4].y= this.y-32;
+        this.board.objects[5].y= this.y-132;
+    }
+    if (this.x==Game.width-this.w && this.board.objects[3].y < this.y +this.h +32 && this.board.objects[3].y > this.y+this.h/2){
+        this.board.objects[3].y= this.y+this.h+32;
+        this.board.objects[4].y= this.y+this.h+100;
+        this.board.objects[5].y= this.y+this.h;
+    }
+    
 
     this.borrar++;
     if(this.borrar >= 300) {
