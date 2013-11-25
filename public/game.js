@@ -1,10 +1,3 @@
-
-
-var Snorlax_ch ={
-     x:undefined,
-     y:undefined
-}
-
 var sprites = {
     pala1A:   { sx: 0, sy: 32, w: 24, h: 68, frames: 1 },
     pala2A:   { sx: 29, sy: 100, w: 24, h: 32, frames: 1 },
@@ -99,7 +92,7 @@ var playGame = function() {
                   board.add(new PalauxB());
             }   
         case 1:
-            board.add(new Pelota_Poke());
+            board.add(new Pelota());
 
     }
     Game.setBoard(2,board);
@@ -122,25 +115,16 @@ var Pala1PlayerA = function() { //Parte central de la pala izquierda
     this.step = function(dt) {
     
 
-        if(Game.keys['down1']) { this.vy = this.maxVel; }
-        else if(Game.keys['up1']) { this.vy = -this.maxVel; }
-        else { this.vy = 0; }
-	
+      if(Game.keys['down1']) { this.vy = this.maxVel; }
+      else if(Game.keys['up1']) { this.vy = -this.maxVel; }
+      else { this.vy = 0; }
+
 	    this.y += this.vy * dt;
 
 	    if(this.y < 32) { this.y = 32; }
 	    else if(this.y > Game.height - 32 - this.h) { 
 	        this.y = Game.height -32 - this.h
 	    }
-	
-	    if(Snorlax_ch.y < this.y && Snorlax_ch.x==0){
-		    if(this.y < Snorlax_ch.y + 82 + 32) { this.y = Snorlax_ch.y + 82 + 32; }
-	    }
-        else if(Snorlax_ch.y > this.y && Snorlax_ch.x==0){
-            if(this.y > Snorlax_ch.y - 32 - this.h) { 
-            this.y = Snorlax_ch.y - 32 - this.h
-            }
-        }
 
 	    this.reload-=dt;
 
@@ -219,14 +203,6 @@ var Pala1PlayerB = function() { //Parte central de la pala derecha
     if(this.y < 32) { this.y = 32; }
     else if(this.y > Game.height - 32 - this.h) { 
         this.y = Game.height -32 - this.h
-    }
-    if(Snorlax_ch.y < this.y && Snorlax_ch.x>Game.width/2){
-        if(this.y < Snorlax_ch.y + 82 + 32) { this.y = Snorlax_ch.y + 82 + 32; }
-    }
-    else if(Snorlax_ch.y > this.y && Snorlax_ch.x>Game.width/2){
-        if(this.y > Snorlax_ch.y - 32 - this.h) { 
-            this.y = Snorlax_ch.y - 32 - this.h
-        }
     }
 
     this.reload-=dt;
@@ -667,22 +643,21 @@ Pelota_Poke.prototype.step = function(dt) {
     var coll = this.board.collide(this,OBJETO_PALA1);
     var coll2 = this.board.collide(this,OBJETO_PALA2);
     if(coll || coll2) {
-      if (!Snorlax_ch.y){
+
         var oy= Math.floor((Math.random()*(Game.height - 82 ))+(10));
         
-        Snorlax_ch.y=oy;
+
         if (coll.sprite == "pala1A" || coll2.sprite =="pala2A" || coll2.sprite=="pala3A"){
-          Snorlax_ch.x=0;
-          this.board.add(new Snorlax());
-          this.board.add(new Cetas(Snorlax_ch.x+37,Snorlax_ch.y - 20));
+
+          this.board.add(new Snorlax(0,oy));
+          this.board.add(new Cetas(37,oy - 20));
         }
         else if(coll.sprite == "pala1B" || coll2.sprite =="pala2B"|| coll2.sprite=="pala3B"){
-           Snorlax_ch.x=Game.width - 101;
-           this.board.add(new Snorlax());
-           this.board.add(new Cetas(Snorlax_ch.x+37,Snorlax_ch.y - 20));
+           this.board.add(new Snorlax(Game.width - 101,oy));
+           this.board.add(new Cetas(Game.width - 101+37,oy - 20));
         }
         this.board.remove(this);
-      }
+      
     }
     
     collision = this.board.collide(this,OBJETO_PALAUX);
@@ -841,10 +816,10 @@ var Corazon = function(ox, oy){
 
     this.step = function(dt) {
 
-	this.y -= this.vy * dt;
+	  this.y -= this.vy * dt;
 
-	if(this.y < 0) { 
-	  this.board.remove(this);
+	  if(this.y < 0) { 
+	    this.board.remove(this);
 	}
 	this.reload-=dt;
 
@@ -854,13 +829,12 @@ var Corazon = function(ox, oy){
 Corazon.prototype = new Sprite();
 
 
-var Snorlax = function(){
+var Snorlax = function(ox,oy){
     this.setup('snorlax', {frame: 0, reloadTime: 0.25});
     
     this.reload = this.reloadTime;
-
-    this.y = Snorlax_ch.y;
-  	this.x = Snorlax_ch.x;
+    this.x=ox;
+    this.y=oy;
   	  	
   	this.borrar=0;
     this.step = function(dt) {
@@ -868,8 +842,6 @@ var Snorlax = function(){
     this.borrar++;
     if(this.borrar >= 300) {
       this.board.remove(this);
-      Snorlax_ch.y=undefined;
-      Snorlax_ch.x=undefined;
     }
 	
 	    this.reload-=dt;
