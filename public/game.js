@@ -327,18 +327,16 @@ Pelota.prototype.step = function(dt) {
 
     var collision = this.board.collide(this,OBJETO_PALA1);
     if(collision) {
-        if (this.x < Game.width/2){
-          this.x= 34
-        }else {this.x=Game.width-34 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
     collision = this.board.collide(this,OBJETO_PALA2);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 34
-        }else {this.x=Game.width-34 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -346,6 +344,8 @@ Pelota.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -353,9 +353,8 @@ Pelota.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 112;
-        }else {this.x=Game.width- 112 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -411,18 +410,16 @@ Pelota_Negra.prototype.step = function(dt) {
 
     var collision = this.board.collide(this,OBJETO_PALA1);
     if(collision) {
-        if (this.x < Game.width/2){
-          this.x= 34
-        }else {this.x=Game.width-34 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
     collision = this.board.collide(this,OBJETO_PALA2);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 34
-        }else {this.x=Game.width-34 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -430,6 +427,8 @@ Pelota_Negra.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -437,9 +436,8 @@ Pelota_Negra.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 112
-        }else {this.x=Game.width- 112 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -513,6 +511,8 @@ Pelota_Azul.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -520,9 +520,8 @@ Pelota_Azul.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 112;
-        }else {this.x=Game.width- 112 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -591,16 +590,17 @@ Pelota_DB.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
-        this.vy = -this.vy;
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 112
-        }else {this.x=Game.width- 112 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -689,6 +689,8 @@ Pelota_Poke.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -696,9 +698,8 @@ Pelota_Poke.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 112
-        }else {this.x=Game.width- 112 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -774,6 +775,8 @@ Pelota_Flor.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_PALAUX);
     if(collision) {
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
@@ -781,9 +784,8 @@ Pelota_Flor.prototype.step = function(dt) {
     
     collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
-       if (this.x < Game.width/2){
-          this.x= 112
-        }else {this.x=Game.width- 112 - this.w};
+        if (this.vx<0){this.x = collision.x+collision.w}
+        else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.08};

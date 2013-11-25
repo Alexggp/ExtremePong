@@ -3,11 +3,12 @@ Si te pregunta si quieres desbloquear algún tipo de ejecucion de scripts,
 acepta (depende del navegador que utilices).
 
 
-Si quieres ponerlo como servidor (necesitas node tener instalado) , en un terminal dentro 
-de la carpeta principal escribe, node server.js. Se abrirá en el puerto 3000 (con el navegador
-entra en la dirección:    localhost:3000).
+Si quieres ponerlo como servidor (necesitas tener node instalado), en un terminal dentro 
+de la carpeta principal escribe, node "server.js". Se abrirá en el puerto 3000 (con el navegador
+entra en la dirección "localhost:3000").
 
 Controles :
+
 	Pala de la derecha:
 		arriba: W
 		abajo: S
