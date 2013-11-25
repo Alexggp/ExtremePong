@@ -1,7 +1,7 @@
 
 var Game = new function() { 
     
-    this.segundos=10;
+    this.segundos=60;
     this.duracion= this.segundos*1000;
     this.dificultad=1;                                                              
 
