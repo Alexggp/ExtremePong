@@ -19,12 +19,21 @@ var sprites = {
     explosion: { sx: 0, sy: 372, w: 48, h: 48, frames: 1 }
 };
 
+var playMenu =function(){
+    Game.setBoard(0,new capaClear(0));
+    Game.setBoard(2, new MenuScreen(startGame));
+}
 
 var startGame = function() {
-    Game.setBoard(0,new capaClear(0));
-    Game.setBoard(2,new TitleScreen("Alex extreme pong", 
-                                    "Aprieta espacio para jugar!",
-                                    playGame));
+    if (Game.jugadores==2){
+      Game.setBoard(2,new TitleScreen("Alex extreme pong", 
+                                      "Aprieta espacio para jugar!",
+                                      playGame));
+    }else{
+      Game.setBoard(2,new TitleScreen("Alex extreme pong", 
+                                      "Aprieta espacio para jugar!",
+                                      play1Player));
+    }
 }
 var OBJETO_PALA1        =   1,
     OBJETO_PALA2        =   2,
@@ -45,8 +54,8 @@ var endGame = function(){
 }
 
 var playGame = function() {
-	  Game.setBoard(1,new GamePoints(0));
-	  Game.setBoard(3,new Reloj());
+	  Game.setBoard(4,new GamePoints(0));
+	  Game.setBoard(3,new Reloj(true));
     var board = new GameBoard();
 
 
@@ -326,7 +335,7 @@ Pelota.prototype.step = function(dt) {
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = -this.vy;
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
@@ -335,7 +344,7 @@ Pelota.prototype.step = function(dt) {
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = -this.vy;
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
@@ -773,17 +782,24 @@ Pelota_Flor.prototype.step = function(dt) {
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////// COMPLEMENTOS
-var Goku = function(player){
+var Goku = function(player,ox,oy){
     var cont=0;
     if(player==2){
       this.setup('Goku2', {vy:100,frame: 0, reloadTime: 0.25, maxVel: 300 });
+      this.y = Game.height/2 - this.h/2;
       this.x = Game.width - 54 - this.w ;
-    }else{
-    this.setup('Goku1', {vy:100,frame: 0, reloadTime: 0.25, maxVel: 300 });
-    this.x = this.w;
+    }else if (player==1){
+      this.setup('Goku1', {vy:100,frame: 0, reloadTime: 0.25, maxVel: 300 });
+      this.y = Game.height/2 - this.h/2;
+      this.x = this.w;
     }
+    else{
+      this.setup('Goku2', {vy:100,frame: 0, reloadTime: 0.25, maxVel: 300 });
+      this.x=ox - this.w/2;
+      this.y=oy - this.h/2
+      }
     this.reload = this.reloadTime;
-    this.y = Game.height/2 - this.h/2;
+    
 
     this.step = function(dt) {
 
@@ -798,7 +814,7 @@ var Goku = function(player){
 	    this.y = Game.height - this.h;
 	    this.vy= -this.vy;
 	}
-  if (cont>5){
+  if (cont>5 && player!=0){
     this.board.remove(this);
   }
 	this.reload-=dt;
@@ -922,7 +938,7 @@ Explosion.prototype.step = function(dt) {
 
 
 $(function() {
-    Game.initialize("game",sprites,startGame);
+    Game.initialize("game",sprites,playMenu);
 });
 
 

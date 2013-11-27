@@ -3,7 +3,8 @@ var Game = new function() {
     
     this.segundos=60;
     this.duracion= this.segundos*1000;
-    this.dificultad=1;                                                              
+    this.dificultad=1;   
+    this.jugadores=1;                                                           
 
     // Inicializa el juego
     this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -22,7 +23,7 @@ var Game = new function() {
     };
 
     // Gestión de la entrada (teclas para izda/derecha y disparo)
-    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda' };  
+    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda',27:'esc' };  
     this.keys = {};
 
     this.setupInput = function() {
@@ -90,6 +91,50 @@ var SpriteSheet = new function() {
     };
 }
 
+var MenuScreen = function MenuScreen(callback) {
+    var up = false;
+    
+    var updcha= false;
+    var upizda= false;
+    
+    var n_jugadores= "1 Jugador";
+	  
+    this.step = function(dt) {
+        if(!Game.keys['fire']) up = true;
+        if(!Game.keys['dcha']) updcha = true;
+        if(!Game.keys['izda']) upizda = true;
+        
+        if(up && Game.keys['fire'] && callback) callback();
+        
+        if (updcha && Game.keys['dcha']){
+            
+        if (Game.jugadores==1){Game.jugadores=2}
+        else{Game.jugadores=1}
+        updcha=false;
+        }
+        if (upizda && Game.keys['izda']){
+            if (Game.jugadores==1){Game.jugadores=2}
+            else{Game.jugadores=1}
+            upizda=false;
+        }
+        
+        if (Game.jugadores ==1){n_jugadores= "1 Jugador"}
+        else{n_jugadores= "2 Jugadores"}
+    };
+    
+    
+
+    this.draw = function(ctx) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "center";
+
+        ctx.font = "90px bangers";
+        ctx.fillText("Alex Extreme Pong",Game.width/2,Game.height/2);
+
+        ctx.font = "20px bangers";
+        ctx.fillText('< '+n_jugadores+' >',Game.width/2,Game.height/2 + 80);
+    };
+};
 
 var TitleScreen = function TitleScreen(title,subtitle,callback) {
     var up = false;
@@ -97,6 +142,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
     var upup = false;
     var updcha= false;
     var upizda= false;
+    var upesc= false;
     
     
     if (Game.points1<Game.points2){
@@ -116,29 +162,41 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         var B="";
     }
 	  
+	  if (Game.jugadores==2){
+      var Max=5;
+	    var Min=1;
+    }else{
+      var Max=1;
+	    var Min=1;
+    }
+	  
+	  
     this.step = function(dt) {
         if(!Game.keys['fire']) up = true;
         if(!Game.keys['down2']) updown = true;
         if(!Game.keys['up2']) upup = true;
         if(!Game.keys['dcha']) updcha = true;
         if(!Game.keys['izda']) upizda = true;
+        if(!Game.keys['esc']) upizda = true;
         
-        if(up && Game.keys['fire'] && callback) callback();
+        if (up && Game.keys['fire'] && callback) callback();
+        if (up && Game.keys['esc']) playMenu();
         
-        if (upup && Game.keys['up2'] && Game.dificultad<5){
+        
+        if (upup && Game.keys['up2'] && Game.dificultad<Max){
             Game.dificultad++;
             upup= false;
         }
-        if (updown && Game.keys['down2'] && Game.dificultad>1){
+        if (updown && Game.keys['down2'] && Game.dificultad>Min){
             Game.dificultad--;
             updown=false;
         }
-        if (updcha && Game.keys['dcha'] && Game.segundos<120){
+        if (updcha && Game.keys['dcha'] && Game.segundos<120 && Game.jugadores==2){
             Game.segundos+=30;
             Game.duracion= Game.segundos*1000;
             updcha= false;
         }
-        if (upizda && Game.keys['izda'] && Game.segundos>30){
+        if (upizda && Game.keys['izda'] && Game.segundos>30 && Game.jugadores==2){
             Game.segundos-=30;
             Game.duracion= Game.segundos*1000;
             upizda=false;
@@ -149,6 +207,12 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
 
     this.draw = function(ctx) {
         ctx.fillStyle = "#FFFFFF";
+        
+        
+        ctx.font = "20px";
+        ctx.fillText("Esc para volver al menu",80,20);
+        
+        
         ctx.textAlign = "center";
 
         ctx.font = "bold 40px bangers";
@@ -168,11 +232,20 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         
         ctx.fillStyle = "Grey";
         ctx.textAlign = "center";
-        ctx.fillText(Game.segundos+"\'\'",Game.width/2,Game.height - Game.height/4 +80);
+        
+        
         ctx.fillText(Game.dificultad,Game.width/2,Game.height - Game.height/4);
-        ctx.font = "bold 15px bangers";
-        ctx.fillText("dificultad:",Game.width/2,Game.height - Game.height/4 - 40);
-        ctx.fillText("duracion:",Game.width/2,Game.height - Game.height/4 + 40);
+        
+        if (Game.jugadores==2){
+          ctx.fillText(Game.segundos+"\'\'",Game.width/2,Game.height - Game.height/4 +80);
+          ctx.font = "bold 15px bangers";
+          ctx.fillText("dificultad:",Game.width/2,Game.height - Game.height/4 - 40);
+          ctx.fillText("duracion:",Game.width/2,Game.height - Game.height/4 + 40);
+        }else{
+          ctx.font = "bold 15px bangers";
+          ctx.fillText("Nivel:",Game.width/2,Game.height - Game.height/4 - 40);
+        }
+        
     };
 };
 
@@ -303,24 +376,36 @@ var GamePoints = function(x) {
   this.step = function(dt) { };
 };
 
-var Reloj = function() {
-  var seg = (Game.duracion/1000)-1;
+var Reloj = function(reg) {     //si reg = true cuenta regresiva
+  var seg;
+  if (reg){seg = (Game.duracion/1000)-1;}
+  else{Game.duracion=1; seg=1;}
+  
 
-
+  
   var cuenta= function(){
-    seg--;
-    if (seg>0) {setTimeout(function(){cuenta()},1000)};
+    if (reg){
+      seg--;
+      if (seg>0) {setTimeout(function(){cuenta()},1000)};
+    }
+    else{
+      setTimeout(function(){cuenta()},1000);
+      if (Game.points1!=3 && Game.points2!=3){
+        seg=Game.duracion++;
+        
+      }
+    }
   }
   setTimeout(function(){cuenta()},1000);
 
   this.draw = function(ctx) {
     ctx.save();
     var oy= 90;
-    if (seg <6){
+    if (seg <6 && reg){
         ctx.font = "bold 100px arial";
         ctx.fillStyle= "red";
         oy= 130;
-    }else if (seg<11){  
+    }else if (seg<11 && reg){  
         ctx.font = "bold 30px arial";
         ctx.fillStyle= "red";
     }else {
