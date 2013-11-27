@@ -1,15 +1,26 @@
 
 var endGame1 = function(){
-    if (Game.dificultad>1){Game.dificultad--}; 
-    Game.setBoard(2,new TitleScreen("Perdiste!!!!", 
-                                    "Has bajado un nivel!",
-                                    playGame1));
+    if (Game.dificultad>1){
+      Game.dificultad-- ;
+      Game.setBoard(2,new TitleScreen("Perdiste!!!!", 
+                                      "Has bajado un nivel!",
+                                      playGame1));
+    }else{
+      Game.setBoard(2,new TitleScreen("Inutil!!!!", 
+                                      "No pasas ni del nivel 1!",
+                                      playGame1));
+    }
 }
 var nextLvl = function(){
-    if (Game.dificultad<4){Game.dificultad++};
-    Game.setBoard(2,new TitleScreen("Ganaste el nivel!!!!", 
-                                    "Aprieta espacio para pasar al siguiente!",
-                                    playGame1));
+    if (Game.dificultad<4){Game.dificultad++;
+      Game.setBoard(2,new TitleScreen("Ganaste el nivel!!!!", 
+                                      "Aprieta espacio para pasar al siguiente!",
+                                      playGame1));
+    }else{
+      Game.setBoard(2,new TitleScreen("Fiera!!! Ganaste!!!", 
+                                      "Este es tu tiempo: "+(Game.duracion-1),
+                                      playMenu));
+    }
 }
 
 var play1Player = function(){

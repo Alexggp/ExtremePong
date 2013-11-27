@@ -19,6 +19,7 @@ Controles :
 
 
 Pelotas :
+---------
 
   Verde: Pelota de tenis, penaliza 1 punto si traspasa tu meta.
   Gris: De mayor tamaño que el resto, penaliza 10 puntos si traspasa tu meta.
@@ -31,6 +32,7 @@ Pelotas :
 
             
 Dificultad:
+-----------
   
   Se selecciona en la pantalla principal, pulsando arriba o abajo en el teclado. 
   

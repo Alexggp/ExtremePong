@@ -45,6 +45,7 @@ var OBJETO_PALA1        =   1,
     OBJETO_SNORLAX      = 128;
 	  OBJETO_PELOTA_POKE  = 256;
 	  OBJETO_PELOTA_FLOR  = 512;
+	  OBJETO_GOKU         =1024;
 
 
 var endGame = function(){
@@ -340,11 +341,11 @@ Pelota.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_PALAUX);
+    collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = this.vy;
+        this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
@@ -418,12 +419,12 @@ Pelota_Negra.prototype.step = function(dt) {
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = -this.vy;
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_PALAUX);
+    collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -502,12 +503,12 @@ Pelota_Azul.prototype.step = function(dt) {
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = -this.vy;
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_PALAUX);
+    collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -586,7 +587,7 @@ Pelota_DB.prototype.step = function(dt) {
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_PALAUX);
+    collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -679,12 +680,12 @@ Pelota_Poke.prototype.step = function(dt) {
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = -this.vy;
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_PALAUX);
+    collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -766,12 +767,12 @@ Pelota_Flor.prototype.step = function(dt) {
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
-        this.vy = -this.vy;
+        this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
-    collision = this.board.collide(this,OBJETO_PALAUX);
+    collision = this.board.collide(this,OBJETO_GOKU);
     if(collision) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
@@ -824,7 +825,7 @@ var Goku = function(player,ox,oy){
 }
 // Heredamos del prototipo new Sprite()
 Goku.prototype = new Sprite();
-Goku.prototype.type = OBJETO_PALAUX;
+Goku.prototype.type = OBJETO_GOKU;
 
 
 
