@@ -4,7 +4,8 @@ var Game = new function() {
     this.segundos=60;
     this.duracion= this.segundos*1000;
     this.dificultad=1;   
-    this.jugadores=1;                                                           
+    this.jugadores=1;   
+    this.vidas=3;                                                        
 
     // Inicializa el juego
     this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -163,7 +164,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
     }
 	  
 	  if (Game.jugadores==2){
-      var Max=5;
+      var Max=6;
 	    var Min=1;
     }
 	  
@@ -177,7 +178,11 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         if(!Game.keys['esc']) upizda = true;
         
         if (up && Game.keys['fire'] && callback) callback();
-        if (up && Game.keys['esc']) playMenu();
+        if (up && Game.keys['esc']){
+           
+                playMenu();
+            
+        };
         
         
         if (upup && Game.keys['up2'] && Game.dificultad<Max){
@@ -207,7 +212,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         
         
         ctx.font = "20px";
-        ctx.fillText("Esc para volver al menu",80,20);
+        ctx.fillText("Esc para volver al men\u00Fa",80,20);
         
         
         ctx.textAlign = "center";
@@ -374,9 +379,7 @@ var GamePoints = function(x) {
 };
 
 var Reloj = function(reg) {     //si reg = true cuenta regresiva
-  var seg;
-  if (reg){seg = (Game.duracion/1000)-1;}
-  else{Game.duracion=1; seg=1;}
+
   
 
   
@@ -393,7 +396,12 @@ var Reloj = function(reg) {     //si reg = true cuenta regresiva
       }
     }
   }
+    var seg;
+  if (reg){seg = (Game.duracion/1000)-1;
   setTimeout(function(){cuenta()},1000);
+  }
+  else{Game.duracion=0; seg=0;cuenta()}
+  
 
   this.draw = function(ctx) {
     ctx.save();
@@ -423,7 +431,7 @@ var Reloj = function(reg) {     //si reg = true cuenta regresiva
 
 
 
-var capaClear = function() {
+var capaClear = function(clear) {
 
     var capa = $('<canvas/>')
 	.attr('width', Game.width)
@@ -433,9 +441,10 @@ var capaClear = function() {
 
     var capaCtx = capa.getContext("2d");
 
- 
-	capaCtx.fillStyle = "#000";
-	capaCtx.fillRect(0,0,capa.width,capa.height);
+  if (clear){
+	  capaCtx.fillStyle = "#000";
+	  capaCtx.fillRect(0,0,capa.width,capa.height);
+	}
     
     this.draw = function(ctx) {
 		ctx.drawImage(capa,

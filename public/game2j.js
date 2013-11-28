@@ -1,24 +1,34 @@
 
 var endGame1 = function(){
-    if (Game.dificultad>1){
-      Game.dificultad-- ;
-      Game.setBoard(2,new TitleScreen("Perdiste!!!!", 
-                                      "Has bajado un nivel!",
+    if (Game.vidas>0){
+      Game.vidas--;
+      Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Perdiste!!! Prueba otra vez...", 
+                                      "Te quedan "+ (Game.vidas+1) + " intentos",
                                       playGame1));
     }else{
-      Game.setBoard(2,new TitleScreen("Inutil!!!!", 
-                                      "No pasas ni del nivel 1!",
-                                      playGame1));
+      if (Game.dificultad>1){
+        Game.dificultad-- ;
+        Game.vidas++;
+        Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Perdiste!!!", 
+                                        "Has bajado un nivel",
+                                        playGame1));
+      }else{
+        Game.setBoard(2,new TitleScreen("aaayyy Inutil... \u00a1No pasas del nivel 1!", 
+                                        "hay que entrenar un poquito",
+                                        playMenu));
+      }
     }
 }
 var nextLvl = function(){
-    if (Game.dificultad<8){Game.dificultad++;
-      Game.setBoard(2,new TitleScreen("Ganaste el nivel!!!!", 
+    if (Game.dificultad<8){
+      Game.dificultad++;
+      Game.vidas++;
+      Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Ganaste el nivel!!!", 
                                       "Aprieta espacio para pasar al siguiente!",
                                       playGame1));
     }else{
-      Game.setBoard(2,new TitleScreen("Fiera!!! Ganaste!!!", 
-                                      "Este es tu tiempo: "+(Game.duracion-1),
+      Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Campeon!!! \u00a1\u00a1\u00a1Ganaste!!!", 
+                                      "\u00c9ste es tu tiempo: "+(Game.duracion-1),
                                       playMenu));
     }
 }
@@ -39,10 +49,9 @@ var playGame1 = function() {
     board.add(new Pala2PlayerA());
     board.add(new Pala3PlayerA());
     
-    board.add(new Pala1Maquina());
+    board.add(new Pala1Maquina(40));
     board.add(new Pala2Maquina());
     board.add(new Pala3Maquina());
-
     switch(Game.dificultad){
         
         case 1:
@@ -54,58 +63,65 @@ var playGame1 = function() {
           board.add(new Pelota());
           break;
         case 3:
+          board.objects[3].factor=30;
+          board.add(new PalauxA());
+          board.add(new PalauxB());
+          board.add(new Pelota());
+          break; 
+        case 4:
+          board.objects[3].factor=30;
           board.add(new Goku(0,Game.width/2,Game.height/2));
           board.add(new Pelota());
           break;
-        case 4:
+        case 5:
+          board.objects[3].factor=30;
           board.add(new cajaMagica(Game.width/2,Game.height/2));
           board.add(new cajaMagica(Game.width/3,Game.height));
           board.add(new cajaMagica(2*Game.width/3,0));
           board.add(new Pelota());
           break;
-        case 5:
+        case 6:
+          Game.vidas++;
+          board.objects[3].factor=25;
           board.add(new Goku(0,3*Game.width/9,0));
           board.add(new Goku(0,7*Game.width/9,Game.height));
           board.add(new Pelota());
-          break;
-
-        case 6:
-          board.add(new PalauxA());
-          board.add(new PalauxB());
-          board.add(new Pelota());
-          break; 
-          
+          break;       
         case 7:
+          board.objects[3].factor=0;
+          board.add(new Pelota());
+          break;  
+        case 8:
+          board.objects[3].factor=30;
           board.add(new Goku(0,2*Game.width/9,0));
           board.add(new Goku(0,7*Game.width/9,Game.height));
           board.add(new cajaMagica2(Game.width/2,Game.height/2));
           board.add(new Pelota());
           break;
-        
-        case 8:
-          board.add(new Pelota());
-          break;
+
    }
+    for (var i =0;i<Game.vidas;i++){
+      board.add(new Corazon(Game.width-35 -35*i, Game.height-32,0));
+    }
     Game.setBoard(2,board);
     
 }
 
 
 ////////// PLAYER MAQUINA
-var Pala1Maquina = function() { //Parte central de la pala derecha
+var Pala1Maquina = function(factor) { //Parte central de la pala derecha
     this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
     this.x = Game.width - 10 - this.w;
     this.y = Game.height/2 - this.h/2;
     
-    this.factor =30;
+    this.factor =factor;
     this.step = function(dt) {
 
     var percent = false;
     var rand = Math.floor(Math.random() * (100));
-    
-    if (Game.dificultad == 8){this.factor=0}else{this.factor=30};
+  
 
     if(rand > this.factor) {  percent = true }
 

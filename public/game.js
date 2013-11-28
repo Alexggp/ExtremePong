@@ -22,8 +22,15 @@ var sprites = {
 };
 
 var playMenu =function(){
-    Game.setBoard(0,new capaClear(0));
+    Game.dificultad=1;
+    Game.vidas=3;
+    Game.segundos=60;
+    Game.duracion= Game.segundos*1000;
+    Game.setBoard(0,new capaClear(true));
     Game.setBoard(2, new MenuScreen(startGame));
+    Game.setBoard(4,new capaClear(false)); //Para que no nos quede pintado el reloj 
+    Game.setBoard(3,new capaClear(false));  //o el marcador si volvemos al Menu
+   
 }
 
 var startGame = function() {
@@ -78,34 +85,44 @@ var playGame = function() {
 
     switch(Game.dificultad){
         
-        case 5:
-            if (Game.dificultad == 5){
-                  board.add(new PalauxA());
-                  board.add(new PalauxB());                 
-            }  
 
-        case 4:
+        case 6:
+            
+            board.add(new PalauxA());
+            board.add(new PalauxB());                 
+              
+
+        case 5:
 
           	rand= Math.floor((Math.random()*(Game.duracion)));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
             rand= Math.floor((Math.random()*Game.duracion));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
-            
-       case 3:  
-            for (var i=1;i<Game.dificultad;i++){
+            setTimeout(function(){(board.add(new Pelota()))},Game.duracion/20*3);
+            rand= Math.floor((Math.random()*(Game.duracion)));
+            setTimeout(function(){(board.add(new Pelota_Flor()))},rand);
+             
+        case 3:  
+            for (var i=1;i<2;i++){
                 rand= Math.floor((Math.random()*(Game.duracion)));
                 setTimeout(function(){(board.add(new Pelota_Flor()))},rand*i);
             };
             rand= Math.floor((Math.random()*(Game.duracion)));
             setTimeout(function(){(board.add(new Pelota_Poke()))},rand);
             
-            for (var i=1;i<Game.dificultad-1;i++){
+            for (var i=1;i<2;i++){
                 setTimeout(function(){(board.add(new Pelota()))},Game.duracion/20*i);
 	          };
             setInterval(function(){(board.add(new Pelota_Negra()))},Game.duracion/6);
             setInterval(function(){(board.add(new Pelota_Azul()))},Game.duracion/5);
             setInterval(function(){(board.add(new Pelota_DB()))},Game.duracion/4);
         
+        case 4:
+            if (Game.dificultad == 4){
+            board.add(new cajaMagica(Game.width/2,Game.height/2));
+            board.add(new cajaMagica(Game.width/3,Game.height));
+            board.add(new cajaMagica(2*Game.width/3,0));
+            }  
         case 2:
             if (Game.dificultad == 2){
                   board.add(new PalauxA());
@@ -131,13 +148,17 @@ var Pala1PlayerA = function() { //Parte central de la pala izquierda
     this.reload = this.reloadTime;
     this.x =  10;
     this.y = Game.height/2 - this.h/2;
-
     this.step = function(dt) {
     
 
       if(Game.keys['down1']) { this.vy = this.maxVel; }
       else if(Game.keys['up1']) { this.vy = -this.maxVel; }
+      
+      else if(Game.keys['down2'] && Game.jugadores==1) { this.vy = this.maxVel; }
+      else if(Game.keys['up2'] && Game.jugadores==1) { this.vy = -this.maxVel; }
       else { this.vy = 0; }
+      
+      
 
 	    this.y += this.vy * dt;
 
@@ -846,17 +867,18 @@ Goku.prototype.type = OBJETO_GOKU;
 
 
 
-var Corazon = function(ox, oy){
+var Corazon = function(ox, oy, ov){
     
     this.setup('corazon', {vy:60, frame: 0, reloadTime: 0.25});
 
     this.reload = this.reloadTime;
     this.y = oy;
   	this.x = ox;
+  	if (ov==undefined) ov=1;
 
     this.step = function(dt) {
 
-	  this.y -= this.vy * dt;
+	  this.y -= this.vy * dt*ov;
 
 	  if(this.y < 0) { 
 	    this.board.remove(this);
