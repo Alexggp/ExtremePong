@@ -12,7 +12,7 @@ var endGame1 = function(){
     }
 }
 var nextLvl = function(){
-    if (Game.dificultad<4){Game.dificultad++;
+    if (Game.dificultad<8){Game.dificultad++;
       Game.setBoard(2,new TitleScreen("Ganaste el nivel!!!!", 
                                       "Aprieta espacio para pasar al siguiente!",
                                       playGame1));
@@ -42,27 +42,49 @@ var playGame1 = function() {
     board.add(new Pala1Maquina());
     board.add(new Pala2Maquina());
     board.add(new Pala3Maquina());
-    
 
     switch(Game.dificultad){
         
         case 1:
           board.add(new Pelota());
           break;
+        
         case 2:
-          board.add(new Goku(0,Game.width/2,Game.height/2));
+          board.add(new cajaMagica2(Game.width/2,0));
           board.add(new Pelota());
           break;
         case 3:
+          board.add(new Goku(0,Game.width/2,Game.height/2));
+          board.add(new Pelota());
+          break;
+        case 4:
+          board.add(new cajaMagica(Game.width/2,Game.height/2));
+          board.add(new cajaMagica(Game.width/3,Game.height));
+          board.add(new cajaMagica(2*Game.width/3,0));
+          board.add(new Pelota());
+          break;
+        case 5:
           board.add(new Goku(0,3*Game.width/9,0));
           board.add(new Goku(0,7*Game.width/9,Game.height));
           board.add(new Pelota());
           break;
-        case 4:
+
+        case 6:
           board.add(new PalauxA());
           board.add(new PalauxB());
           board.add(new Pelota());
           break; 
+          
+        case 7:
+          board.add(new Goku(0,2*Game.width/9,0));
+          board.add(new Goku(0,7*Game.width/9,Game.height));
+          board.add(new cajaMagica2(Game.width/2,Game.height/2));
+          board.add(new Pelota());
+          break;
+        
+        case 8:
+          board.add(new Pelota());
+          break;
    }
     Game.setBoard(2,board);
     
@@ -76,13 +98,16 @@ var Pala1Maquina = function() { //Parte central de la pala derecha
     this.reload = this.reloadTime;
     this.x = Game.width - 10 - this.w;
     this.y = Game.height/2 - this.h/2;
-
+    
+    this.factor =30;
     this.step = function(dt) {
 
     var percent = false;
     var rand = Math.floor(Math.random() * (100));
+    
+    if (Game.dificultad == 8){this.factor=0}else{this.factor=30};
 
-    if(rand > 20) {  percent = true }
+    if(rand > this.factor) {  percent = true }
 
   
   
@@ -174,3 +199,66 @@ var PalauxB =function(){ // Pala auxiliar de la pala derecha (en la izquierda)
 }
 PalauxB.prototype = new Sprite();
 PalauxB.prototype.type = OBJETO_PALAUX;
+
+
+var cajaMagica = function(ox,oy){
+    this.setup('cajaMagica', {vy:50,frame: 0, reloadTime: 0.25});
+    this.x=ox - this.w/2;
+    this.y=oy - this.h/2
+    
+    this.reload = this.reloadTime;
+    
+
+    this.step = function(dt) {
+
+	  this.y += this.vy * dt;
+
+	  if(this.y < 0) { 
+	    this.y = 0; 
+	    this.vy= -this.vy
+	  }
+	  else if(this.y > Game.height - this.h) { 
+	      this.y = Game.height - this.h;
+	      this.vy= -this.vy;
+	  }
+	  this.reload-=dt;
+  
+    }
+
+}
+// Heredamos del prototipo new Sprite()
+cajaMagica.prototype = new Sprite();
+cajaMagica.prototype.type = OBJETO_CAJAMAGICA;
+
+var cajaMagica2 = function(ox,oy){
+    this.setup('cajaMagica2', {vy:80,frame: 0, reloadTime: 0.25});
+    this.x=ox - this.w/2;
+    this.y=oy - this.h/2;
+    
+    this.reload = this.reloadTime;
+    
+
+    this.step = function(dt) {
+
+	  this.y += this.vy * dt;
+
+	  if(this.y < 0) { 
+	    this.y = 0; 
+	    this.vy= -this.vy
+	  }
+	  else if(this.y > Game.height - this.h) { 
+	      this.y = Game.height - this.h;
+	      this.vy= -this.vy;
+	  }
+	  this.reload-=dt;
+  
+    }
+
+}
+// Heredamos del prototipo new Sprite()
+cajaMagica2.prototype = new Sprite();
+cajaMagica2.prototype.type = OBJETO_CAJAMAGICA;
+
+
+
+

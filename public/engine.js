@@ -165,9 +165,6 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
 	  if (Game.jugadores==2){
       var Max=5;
 	    var Min=1;
-    }else{
-      var Max=1;
-	    var Min=1;
     }
 	  
 	  

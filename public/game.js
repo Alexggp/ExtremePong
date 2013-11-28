@@ -16,7 +16,9 @@ var sprites = {
     corazon:  { sx: 142, sy:0, w: 30, h: 28, frames: 1 },
     snorlax:  { sx: 6, sy:277, w: 101, h: 82, frames: 1 },
     cetas:    { sx: 0, sy:133, w: 30, h: 8, frames:4},
-    explosion: { sx: 0, sy: 372, w: 48, h: 48, frames: 1 }
+    explosion: { sx: 0, sy: 372, w: 48, h: 48, frames: 1 },
+    cajaMagica: { sx: 175, sy:0, w: 60, h: 60, frames: 1 },
+    cajaMagica2: { sx: 175, sy:0, w: 120, h: 120, frames: 1 }
 };
 
 var playMenu =function(){
@@ -46,6 +48,7 @@ var OBJETO_PALA1        =   1,
 	  OBJETO_PELOTA_POKE  = 256;
 	  OBJETO_PELOTA_FLOR  = 512;
 	  OBJETO_GOKU         =1024;
+	  OBJETO_CAJAMAGICA   =2048;
 
 
 var endGame = function(){
@@ -295,6 +298,7 @@ var Pelota = function(){
     this.reload = this.reloadTime;
     this.x = Game.width/2 - this.w/2;
     this.y = Game.height/2 - this.h/2;
+    this.change = false;
 }
 
 Pelota.prototype = new Sprite();
@@ -349,6 +353,19 @@ Pelota.prototype.step = function(dt) {
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
+    
+    
+    collision = this.board.collide(this,OBJETO_CAJAMAGICA);
+    if(collision) {
+       this.change = true;
+    }
+    if (!collision && this.change){ 
+        this.vy = -this.vy;
+        this.vx = this.vx;
+        this.change = false;
+    }
+    
+    
     
     if(this.x < 0 - this.w) {
        this.board.remove(this);
