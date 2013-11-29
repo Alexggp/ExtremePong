@@ -22,14 +22,15 @@ var sprites = {
 };
 
 var playMenu =function(){
+    
+    Game.boards=[];
     Game.dificultad=1;
     Game.vidas=3;
     Game.segundos=60;
     Game.duracion= Game.segundos*1000;
-    Game.setBoard(0,new capaClear(true));
+    Game.setBoard(0,new capaClear());
     Game.setBoard(2, new MenuScreen(startGame));
-    Game.setBoard(4,new capaClear(false)); //Para que no nos quede pintado el reloj 
-    Game.setBoard(3,new capaClear(false));  //o el marcador si volvemos al Menu
+    
    
 }
 

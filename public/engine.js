@@ -46,7 +46,7 @@ var Game = new function() {
 
 
     // Bucle del juego
-    var boards = [];
+    this.boards = [];
 
     this.loop = function() { 
 	// segundos transcurridos
@@ -54,17 +54,17 @@ var Game = new function() {
 
 	// Para cada board, de 0 en adelante, se 
 	// llama a su método step() y luego a draw()
-	for(var i=0,len = boards.length;i<len;i++) {
-	    if(boards[i]) { 
-		boards[i].step(dt);
-		boards[i].draw(Game.ctx);
+	for(var i=0,len = Game.boards.length;i<len;i++) {
+	    if(Game.boards[i]) { 
+		Game.boards[i].step(dt);
+		Game.boards[i].draw(Game.ctx);
 	    }
 	}
 
 	setTimeout(Game.loop,30);
     };
     
-   this.setBoard = function(num,board) { boards[num] = board; };
+   this.setBoard = function(num,board) { this.boards[num] = board; };
 };
 
 
@@ -381,17 +381,18 @@ var GamePoints = function(x) {
 var Reloj = function(reg) {     //si reg = true cuenta regresiva
 
   
-
+  
   
   var cuenta= function(){
     if (reg){
       seg--;
       if (seg>0) {setTimeout(function(){cuenta()},1000)};
     }
-    else{
-      setTimeout(function(){cuenta()},1000);
+    else{   
       if (Game.points1!=3 && Game.points2!=3){
+        setTimeout(function(){cuenta()},1000);
         seg=Game.duracion++;
+
         
       }
     }
@@ -431,7 +432,7 @@ var Reloj = function(reg) {     //si reg = true cuenta regresiva
 
 
 
-var capaClear = function(clear) {
+var capaClear = function() {
 
     var capa = $('<canvas/>')
 	.attr('width', Game.width)
@@ -441,10 +442,10 @@ var capaClear = function(clear) {
 
     var capaCtx = capa.getContext("2d");
 
-  if (clear){
+ 
 	  capaCtx.fillStyle = "#000";
 	  capaCtx.fillRect(0,0,capa.width,capa.height);
-	}
+	
     
     this.draw = function(ctx) {
 		ctx.drawImage(capa,
