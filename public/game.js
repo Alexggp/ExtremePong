@@ -23,7 +23,8 @@ var sprites = {
 
 var playMenu =function(){
     
-
+    Game.points1=undefined;
+    Game.points2=undefined;
     Game.boards=[];
     Game.dificultad=1;
     Game.setBoard(0,new capaClear());
