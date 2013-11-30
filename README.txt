@@ -2,7 +2,8 @@ ALEX EXTREME PONG
 =================
 
 El clásico juego de palas llevado al extremo.
-Míde tus habilidades contra la máquina en el modo arcade, o enfrentate a un amigo en un modo de dos jugadores lleno de sorpresas y posibilidades. 
+Mide tus habilidades contra la máquina en el modo arcade, o enfrentate a un amigo en un modo de dos jugadores 
+lleno de sorpresas y posibilidades. 
 
 JUGAR
 =====
