@@ -23,11 +23,9 @@ var sprites = {
 
 var playMenu =function(){
     
+
     Game.boards=[];
     Game.dificultad=1;
-    Game.vidas=3;
-    Game.segundos=60;
-    Game.duracion= Game.segundos*1000;
     Game.setBoard(0,new capaClear());
     Game.setBoard(2, new MenuScreen(startGame));
     
@@ -36,13 +34,17 @@ var playMenu =function(){
 
 var startGame = function() {
     if (Game.jugadores==2){
+      Game.segundos=60;    
+      Game.duracion= Game.segundos*1000;
       Game.setBoard(2,new TitleScreen("Alex extreme pong", 
                                       "Aprieta espacio para jugar!",
                                       playGame));
     }else{
+      Game.vidas=3;
+      Game.duracion=0;
       Game.setBoard(2,new TitleScreen("Alex extreme pong", 
                                       "Aprieta espacio para jugar!",
-                                      play1Player));
+                                      playGame1));
     }
 }
 var OBJETO_PALA1        =   1,

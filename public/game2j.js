@@ -33,14 +33,13 @@ var nextLvl = function(){
     }
 }
 
-var play1Player = function(){
-    Game.setBoard(4,new GamePoints(0));
-	  Game.setBoard(3,new Reloj(false));
-	  playGame1();
-}
+
 
 var playGame1 = function() {
+
     Game.setBoard(4,new GamePoints(0));
+    Game.setBoard(3,new Reloj(false,Game.duracion));
+    
 
     var board = new GameBoard();
 

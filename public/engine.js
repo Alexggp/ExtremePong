@@ -378,9 +378,7 @@ var GamePoints = function(x) {
   this.step = function(dt) { };
 };
 
-var Reloj = function(reg) {     //si reg = true cuenta regresiva
-
-  
+var Reloj = function(reg,segundos) {     //si reg = true cuenta regresiva
   
   
   var cuenta= function(){
@@ -388,20 +386,20 @@ var Reloj = function(reg) {     //si reg = true cuenta regresiva
       seg--;
       if (seg>0) {setTimeout(function(){cuenta()},1000)};
     }
-    else{   
+    else{  
+      console.log("entra",Game.points1,Game.points2); 
       if (Game.points1!=3 && Game.points2!=3){
         setTimeout(function(){cuenta()},1000);
         seg=Game.duracion++;
-
         
-      }
+      }    
     }
   }
     var seg;
   if (reg){seg = (Game.duracion/1000)-1;
   setTimeout(function(){cuenta()},1000);
   }
-  else{Game.duracion=0; seg=0;cuenta()}
+  else{Game.duracion=segundos; seg=Game.duracion;console.log("lanza");cuenta()}
   
 
   this.draw = function(ctx) {
