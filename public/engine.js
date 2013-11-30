@@ -98,7 +98,7 @@ var MenuScreen = function MenuScreen(callback) {
     var updcha= false;
     var upizda= false;
     
-    var n_jugadores= "1 Jugador";
+    var n_jugadores= "ARCADE";
 	  
     this.step = function(dt) {
         if(!Game.keys['fire']) up = true;
@@ -119,8 +119,8 @@ var MenuScreen = function MenuScreen(callback) {
             upizda=false;
         }
         
-        if (Game.jugadores ==1){n_jugadores= "1 Jugador"}
-        else{n_jugadores= "2 Jugadores"}
+        if (Game.jugadores ==1){n_jugadores= "ARCADE"}
+        else{n_jugadores= "VS"}
     };
     
     
