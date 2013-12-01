@@ -1,3 +1,9 @@
+/*
+    Alex Extreme Pong
+    Copyright (C) 2013  Alejandro García-Gasco Pérez
+*/
+
+
 var sprites = {
     pala1A:   { sx: 0, sy: 32, w: 24, h: 68, frames: 1 },
     pala2A:   { sx: 29, sy: 100, w: 24, h: 32, frames: 1 },

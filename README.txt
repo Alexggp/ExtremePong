@@ -4,6 +4,8 @@ ALEX EXTREME PONG
 El clásico juego de palas llevado al extremo.
 Míde tus habilidades contra la máquina en el modo arcade, o enfrentate a un amigo en un modo de dos jugadores lleno de sorpresas y posibilidades. 
 
+
+
 JUGAR
 =====
 
@@ -16,6 +18,10 @@ Si quieres ponerlo como servidor (necesitas tener node instalado), en un termina
 de la carpeta principal escribe, node "server.js". Se abrirá en el puerto 3000 (con el navegador
 entra en la dirección "localhost:3000").
 
+
+Para navegar por los diferentes menús pulsa las las Flechas de dirección para seleccionar y la barra
+de espacio para confirmar.
+
 Controles :
 
         Pala de la izquierda:
@@ -26,13 +32,14 @@ Controles :
                 arriba: Flecha arriba
                 abajo: Flecha abajo
   
-  Para partidas 1 jugador, ambos controles mueven la pala.
+Para partidas 1 jugador, ambos controles mueven la pala.
 
 
 
 
-2 JUGADORES ( VS )
+2 JUGADORES ( VS )    
 ==================
+
 
       Pelotas :
       ---------

@@ -1,3 +1,7 @@
+/*
+    Alex Extreme Pong
+    Copyright (C) 2013  Alejandro García-Gasco Pérez
+*/
 
 var endGame1 = function(){
     if (Game.vidas>0){
