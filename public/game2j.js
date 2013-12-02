@@ -72,7 +72,7 @@ var playGame1 = function() {
     
      if(Music.extension){Music.niveles.pitido.Miplay()};    //SONIDO: PITIDO INICIAL
     
-    
+ 
     switch(Game.dificultad){
         
         case 1:

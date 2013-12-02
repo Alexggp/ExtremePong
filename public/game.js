@@ -336,7 +336,7 @@ PalauxB.prototype.type = OBJETO_PALAUX;
 
 //////////////// PELOTA NORMAL
 var Pelota = function(){
-    this.setup('pelota', {vx:110, vy:100,frame: 0, reloadTime: 0.25, maxVel: 500 });
+    this.setup('pelota', {vx:110, vy:100,frame: 0, reloadTime: 0.25, maxVel: 400 });
     
     randx= Math.floor((Math.random()*this.vx)+(this.vx-10));
     randy= Math.floor((Math.random()*this.vy)+(this.vy-20));
