@@ -12,23 +12,26 @@ var Game = new function() {
     this.vidas=3;                                                        
 
     // Inicializa el juego
-    this.initialize = function(canvasElementId,sprite_data,callback) {
-	this.canvas = document.getElementById(canvasElementId)
-	this.width = this.canvas.width;
-	this.height= this.canvas.height;
+  this.initialize = function(canvasElementId,sprite_data,callback) {
+	    this.canvas = document.getElementById(canvasElementId)
+	    this.width = this.canvas.width;
+	    this.height= this.canvas.height;
 
-	this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
-	if(!this.ctx) { return alert("Please upgrade your browser to play"); }
+	    this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
+	    if(!this.ctx) { return alert("Please upgrade your browser to play"); }
 
-	this.setupInput();
+	    this.setupInput();
 
-	this.loop(); 
+	    this.loop(); 
+	    
 
-	SpriteSheet.load(sprite_data,callback);
-    };
+      Music.cargar();
+      
+	    SpriteSheet.load(sprite_data,callback);
+   };
 
     // Gestión de la entrada (teclas para izda/derecha y disparo)
-    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda',27:'esc' };  
+    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda',27:'esc',77:'mute' };  
     this.keys = {};
 
     this.setupInput = function() {
@@ -113,14 +116,16 @@ var MenuScreen = function MenuScreen(callback) {
         
         if (updcha && Game.keys['dcha']){
             
-        if (Game.jugadores==1){Game.jugadores=2}
-        else{Game.jugadores=1}
-        updcha=false;
+            if (Game.jugadores==1){Game.jugadores=2}
+            else{Game.jugadores=1}
+            updcha=false;
+            if(Music.extension){Music.pelota.pop3.Miplay()}
         }
         if (upizda && Game.keys['izda']){
             if (Game.jugadores==1){Game.jugadores=2}
             else{Game.jugadores=1}
             upizda=false;
+            if(Music.extension){Music.pelota.pop3.Miplay()}
         }
         
         if (Game.jugadores ==1){n_jugadores= "ARCADE"}
@@ -183,7 +188,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         
         if (up && Game.keys['fire'] && callback) callback();
         if (up && Game.keys['esc']){
-           
+                if(Music.extension){Music.menu.chmod.Miplay()}
                 playMenu();
             
         };
@@ -192,20 +197,24 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         if (upup && Game.keys['up2'] && Game.dificultad<Max){
             Game.dificultad++;
             upup= false;
+            if(Music.extension){Music.pelota.pop3.Miplay()}
         }
         if (updown && Game.keys['down2'] && Game.dificultad>Min){
             Game.dificultad--;
             updown=false;
+            if(Music.extension){Music.pelota.pop3.Miplay()}
         }
         if (updcha && Game.keys['dcha'] && Game.segundos<120 && Game.jugadores==2){
             Game.segundos+=30;
             Game.duracion= Game.segundos*1000;
             updcha= false;
+            if(Music.extension){Music.pelota.pop3.Miplay()}
         }
         if (upizda && Game.keys['izda'] && Game.segundos>30 && Game.jugadores==2){
             Game.segundos-=30;
             Game.duracion= Game.segundos*1000;
             upizda=false;
+            if(Music.extension){Music.pelota.pop3.Miplay()}
         }
     };
     
@@ -303,11 +312,12 @@ var GameBoard = function() {
 	      }
 	      return false;
     };
-
+    
     this.step = function(dt) { 
 	      this.resetRemoved();
 	      this.iterate('step',dt);
 	      this.finalizeRemoved();
+	      
     };
 
     this.draw= function(ctx) {
@@ -391,7 +401,6 @@ var Reloj = function(reg,segundos) {     //si reg = true cuenta regresiva
       if (seg>0) {setTimeout(function(){cuenta()},1000)};
     }
     else{  
-      console.log("entra",Game.points1,Game.points2); 
       if (Game.points1!=3 && Game.points2!=3){
         setTimeout(function(){cuenta()},1000);
         seg=Game.duracion++;
@@ -403,7 +412,7 @@ var Reloj = function(reg,segundos) {     //si reg = true cuenta regresiva
   if (reg){seg = (Game.duracion/1000)-1;
   setTimeout(function(){cuenta()},1000);
   }
-  else{Game.duracion=segundos; seg=Game.duracion;console.log("lanza");cuenta()}
+  else{Game.duracion=segundos; seg=Game.duracion;cuenta()}
   
 
   this.draw = function(ctx) {
@@ -459,3 +468,139 @@ var capaClear = function() {
 
     this.step = function(dt) {}
 }
+
+var MuteScreen = function(){
+    var up = false;
+    var mute= false;
+    var extension;	  
+    this.step = function(dt) {
+        if(!Game.keys['mute']) up = true;
+        
+       
+        if (up && Game.keys['mute']){
+            
+            if (!mute){
+              if(!Music.niveles.background.paused && Music.extension){
+                   Music.niveles.background.pause();                  
+              };
+              if(!Music.menu.background.paused && Music.extension){
+                   Music.menu.background.pause();                  
+              };
+              extension= Music.extension;
+              Music.extension=undefined;
+              mute=true;
+            }
+            else{
+              Music.extension=extension;
+              if (Game.points1==undefined && Music.extension){Music.menu.background.play()} 
+              else{Music.niveles.background.play()} 
+              mute=false;
+            }
+         up=false;
+           
+        }
+       
+    };
+    
+    
+
+    this.draw = function(ctx) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "center";
+
+        ctx.font = "10px";
+        ctx.fillText("M : mute",50,Game.height-20);
+
+      
+    };
+};
+	      
+var Music = {
+        loaded:true,
+        loadedCount:0, // Assets that have been loaded so far
+        totalCount:0, // Total number of assets that need to be loaded
+        
+        init:function(){
+                // check for sound support
+                var mp3Support,oggSupport;
+                var audio = document.createElement('audio');
+                if (audio.canPlayType) {
+                         // Currently canPlayType() returns: "", "maybe" or "probably"
+                         mp3Support = "" != audio.canPlayType('audio/mpeg');
+                         oggSupport = "" != audio.canPlayType('audio/ogg; codecs="vorbis"');
+                } else {
+                        //The audio tag is not supported
+                        mp3Support = false;
+                        oggSupport = false;        
+                }
+                // Check for ogg, then mp3, and finally set extension to undefined
+                Music.extension = oggSupport ? "ogg" : mp3Support ? "mp3" : undefined;                
+        },
+        loadSound:function(url){
+                this.totalCount++;
+                this.loaded = false;
+                var audio = new Audio();
+                audio.src = 'audio/'+Music.extension+'/'+url+'.'+Music.extension;
+                audio.Miplay=function(){
+                      this.load();    // Todo esto para que no se solapen los plays y suene siempre
+                      this.play();
+                      
+                      }
+                return audio;
+        },
+        cargar:function(){
+            
+            this.init();
+            
+            
+            var rand = Math.random() < 0.5 ? 0 : 1;
+            if (rand){var sound1= "get_your_groove_on"; var sound2="emotional_orchestra"}
+            else{var sound2= "get_your_groove_on"; var sound1="emotional_orchestra"}
+            
+            
+            this.niveles = {
+                    pitido:this.loadSound("pitido_inicial"),
+                    subir:this.loadSound("subir_nivel"),
+                    bajar:this.loadSound("bajar_nivel"),
+                    over:this.loadSound("game_over"),
+                    winner:this.loadSound("winner"),
+                    rewind:this.loadSound("cartoon_up"),
+                    aplauso:this.loadSound("aplauso"),
+                    background:this.loadSound(sound1)
+            },
+            this.pelota = {
+                    pop1:this.loadSound("pop"),
+                    pop2:this.loadSound("pop2"),
+                    pop3:this.loadSound("pop_palas"),
+                    pop4:this.loadSound("pop_tenis"), 
+                    pop5:this.loadSound("pop_tenis_2")     
+            },
+            this.goku = {
+                    salir:this.loadSound("kung_fu"),
+                    desvio:this.loadSound("woosh")
+            },
+            this.cajaMagica=this.loadSound("caja_magica");
+            this.snorlax=this.loadSound("snorlax");
+            this.grito=this.loadSound("lady_scream");
+            this.vida=this.loadSound("vida");
+            this.explosion=this.loadSound("explosion");
+            this.menu={
+                    chmod:this.loadSound("opciones_menu"),
+                    background:this.loadSound(sound2)                 
+            };
+            
+            
+            this.menu.background.loop=true;
+            this.niveles.background.loop=true;
+            if (rand){this.menu.background.volume=0.5}
+            else{this.niveles.background.volume=0.5};
+        }
+        
+}
+
+
+
+
+
+
+

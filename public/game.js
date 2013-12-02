@@ -28,11 +28,19 @@ var sprites = {
 };
 
 var playMenu =function(){
+ 
+    if(!Music.niveles.background.paused && Music.extension){
+         Music.niveles.background.pause();
+         Music.niveles.background.currentTime = 0;
+    };
+    if(Music.menu.background.paused && Music.extension){Music.menu.background.Miplay()};
+    
     
     Game.points1=undefined;
     Game.points2=undefined;
     Game.boards=[];
     Game.dificultad=1;
+    Game.setBoard(5,new MuteScreen());
     Game.setBoard(0,new capaClear());
     Game.setBoard(2, new MenuScreen(startGame));
     
@@ -40,6 +48,9 @@ var playMenu =function(){
 }
 
 var startGame = function() {
+
+    if(Music.extension){Music.menu.chmod.Miplay()};
+           
     if (Game.jugadores==2){
       Game.segundos=60;    
       Game.duracion= Game.segundos*1000;
@@ -69,12 +80,20 @@ var OBJETO_PALA1        =   1,
 
 
 var endGame = function(){
+    if(Music.extension){Music.niveles.aplauso.Miplay()}
     Game.setBoard(2,new TitleScreen("Fin del juego!!!!", 
                                     "Aprieta espacio para jugar otra vez!",
                                     playGame));
 }
 
 var playGame = function() {
+
+    if(!Music.menu.background.paused && Music.extension){
+              Music.menu.background.pause();
+              Music.menu.background.currentTime = 0};
+    if(Music.niveles.background.paused && Music.extension){Music.niveles.background.Miplay()};
+
+
 	  Game.setBoard(4,new GamePoints(0));
 	  Game.setBoard(3,new Reloj(true));
     var board = new GameBoard();
@@ -88,10 +107,10 @@ var playGame = function() {
     board.add(new Pala2PlayerB());
     board.add(new Pala3PlayerB());
 
+    if(Music.extension){Music.niveles.pitido.Miplay()};    //SONIDO: PITIDO INICIAL
+    
     
     // PELOTAS
-
-    
 
     switch(Game.dificultad){
         
@@ -160,7 +179,6 @@ var Pala1PlayerA = function() { //Parte central de la pala izquierda
     this.y = Game.height/2 - this.h/2;
     this.step = function(dt) {
     
-
       if(Game.keys['down1']) { this.vy = this.maxVel; }
       else if(Game.keys['up1']) { this.vy = -this.maxVel; }
       
@@ -344,10 +362,11 @@ Pelota.prototype.step = function(dt) {
     this.y += this.vy * dt;
 
 
-    if(this.y < 0) { this.y = 0, this.vy = -this.vy; }
+    if(this.y < 0) { this.y = 0, this.vy = -this.vy; if(Music.extension){Music.pelota.pop4.Miplay()};}
     else if(this.y > Game.height - this.h) { 
-        this.y = Game.height - this.h
+        this.y = Game.height - this.h;
         this.vy = -this.vy;
+        if(Music.extension){Music.pelota.pop4.Miplay()};
         } 
 
     var collision = this.board.collide(this,OBJETO_PALA1);
@@ -356,6 +375,7 @@ Pelota.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+        if(Music.extension){Music.pelota.pop5.Miplay()};
     }
     
     collision = this.board.collide(this,OBJETO_PALA2);
@@ -365,6 +385,7 @@ Pelota.prototype.step = function(dt) {
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+        if(Music.extension){Music.pelota.pop5.Miplay()}
     }
     
     collision = this.board.collide(this,OBJETO_PALAUX);
@@ -374,6 +395,7 @@ Pelota.prototype.step = function(dt) {
         this.vy = this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+        if(Music.extension){Music.pelota.pop5.Miplay()}
     }
     
     collision = this.board.collide(this,OBJETO_GOKU);
@@ -383,6 +405,7 @@ Pelota.prototype.step = function(dt) {
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+        if(Music.extension){Music.goku.desvio.Miplay()}
     }
     
     
@@ -394,6 +417,7 @@ Pelota.prototype.step = function(dt) {
         this.vy = -this.vy;
         this.vx = this.vx;
         this.change = false;
+        if(Music.extension){Music.cajaMagica.Miplay()}
     }
     
     
@@ -401,13 +425,14 @@ Pelota.prototype.step = function(dt) {
     if(this.x < 0 - this.w) {
        this.board.remove(this);
        Game.points1++;
+       if(Music.extension){Music.pelota.pop1.Miplay()}
        this.board.add(new Pelota());
        
     }
 	  else if(this.x > Game.width) {  
 	     this.board.remove(this);
 	     Game.points2++;
-	     
+	     if(Music.extension){Music.pelota.pop1.Miplay()}
 	     this.board.add(new Pelota());   
 	  }
 
@@ -440,10 +465,11 @@ Pelota_Negra.prototype.step = function(dt) {
     this.y += this.vy * dt;
 
 
-    if(this.y < 0) { this.y = 0, this.vy = -this.vy; }
+    if(this.y < 0) { this.y = 0, this.vy = -this.vy; if(Music.extension){Music.pelota.pop4.Miplay()};}
     else if(this.y > Game.height - this.h) { 
         this.y = Game.height - this.h
         this.vy = -this.vy;
+        if(Music.extension){Music.pelota.pop4.Miplay()};
         } 
 
     var collision = this.board.collide(this,OBJETO_PALA1);
@@ -451,6 +477,7 @@ Pelota_Negra.prototype.step = function(dt) {
         if (this.vx<0){this.x = collision.x+collision.w}
         else{this.x=collision.x-this.w};
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -460,6 +487,7 @@ Pelota_Negra.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -469,6 +497,7 @@ Pelota_Negra.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -479,15 +508,18 @@ Pelota_Negra.prototype.step = function(dt) {
         this.vy = -this.vy;
         this.vx = -this.vx;
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
+        if(Music.extension){Music.goku.desvio.Miplay()};
     }
     
     if(this.x < 0 - this.w) {
        this.board.remove(this);
-       Game.points1= Game.points1 + 10;       
+       Game.points1= Game.points1 + 10;  
+       if(Music.extension){Music.pelota.pop1.Miplay()}     
     }
 	  else if(this.x > Game.width) {  
 	     this.board.remove(this);
 	     Game.points2= Game.points2 + 10; 
+	     if(Music.extension){Music.pelota.pop2.Miplay()}
 	      
 	  }
 
@@ -521,10 +553,11 @@ Pelota_Azul.prototype.step = function(dt) {
     this.y += this.vy * dt;
 
 
-    if(this.y < 0) { this.y = 0, this.vy = -this.vy; }
+    if(this.y < 0) { this.y = 0, this.vy = -this.vy; if(Music.extension){Music.pelota.pop4.Miplay()};}
     else if(this.y > Game.height - this.h) { 
         this.y = Game.height - this.h
         this.vy = -this.vy;
+        if(Music.extension){Music.pelota.pop4.Miplay()};
         } 
 
     var collision = this.board.collide(this,OBJETO_PALA1);
@@ -535,6 +568,7 @@ Pelota_Azul.prototype.step = function(dt) {
         }else {Game.points2= Game.points2 - 10;};
 			this.board.add(new Corazon(this.x, this.y));
         this.board.remove(this);
+      if(Music.extension){Music.vida.Miplay()}
     }
     
     collision = this.board.collide(this,OBJETO_PALA2);
@@ -545,6 +579,7 @@ Pelota_Azul.prototype.step = function(dt) {
         }else {Game.points2= Game.points2 - 10;};
 			this.board.add(new Corazon(this.x, this.y));
         this.board.remove(this);
+        if(Music.extension){Music.vida.Miplay()}
     }
     
     collision = this.board.collide(this,OBJETO_PALAUX);
@@ -553,6 +588,7 @@ Pelota_Azul.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -562,6 +598,7 @@ Pelota_Azul.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.goku.desvio.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -604,10 +641,11 @@ Pelota_DB.prototype.step = function(dt) {
     this.y += this.vy * dt;
 
 
-    if(this.y < 0) { this.y = 0, this.vy = -this.vy; }
+    if(this.y < 0) { this.y = 0, this.vy = -this.vy; if(Music.extension){Music.pelota.pop4.Miplay()};}
     else if(this.y > Game.height - this.h) { 
         this.y = Game.height - this.h
         this.vy = -this.vy;
+        if(Music.extension){Music.pelota.pop4.Miplay()};
         } 
 
     var collision = this.board.collide(this,OBJETO_PALA1);
@@ -616,6 +654,7 @@ Pelota_DB.prototype.step = function(dt) {
           this.board.add(new Goku(1));
         }else {this.board.add(new Goku(2))};
         this.board.remove(this);
+        if(Music.extension){Music.goku.salir.Miplay()}
     }
     
     collision = this.board.collide(this,OBJETO_PALA2);
@@ -632,6 +671,7 @@ Pelota_DB.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -641,6 +681,7 @@ Pelota_DB.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.goku.desvio.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -687,18 +728,20 @@ Pelota_Poke.prototype.step = function(dt) {
     }
 
 
-    if(this.y < 0) { this.y = 0, this.vy = -this.vy; }
+    if(this.y < 0) { this.y = 0, this.vy = -this.vy; if(Music.extension){Music.pelota.pop4.Miplay()};}
     else if(this.y > Game.height - this.h) { 
         this.y = Game.height - this.h
         this.vy = -this.vy;
+        if(Music.extension){Music.pelota.pop4.Miplay()};
         } 
     if(this.x < (0)) {
       this.x=0;
       this.vx=-this.vx;
-      
+      if(Music.extension){Music.pelota.pop4.Miplay()};
       if (this.vx<= this.maxVel){this.vx=this.vx*1.05};       
     }
-	  else if(this.x > Game.width - this.w) {  
+	  else if(this.x > Game.width - this.w) { 
+	    if(Music.extension){Music.pelota.pop4.Miplay()}; 
       this.vx=-this.vx;
       this.x= Game.width - this.w
 	    if (this.vx<= this.maxVel){this.vx=this.vx*1.05};  
@@ -714,10 +757,12 @@ Pelota_Poke.prototype.step = function(dt) {
         if (coll.sprite == "pala1A" || coll2.sprite =="pala2A" || coll2.sprite=="pala3A"){
 
           this.board.add(new Snorlax(0,oy));
+          if(Music.extension){Music.snorlax.Miplay()}
           this.board.add(new Cetas(37,oy - 20));
         }
         else if(coll.sprite == "pala1B" || coll2.sprite =="pala2B"|| coll2.sprite=="pala3B"){
            this.board.add(new Snorlax(Game.width - 101,oy));
+           if(Music.extension){Music.snorlax.Miplay()}
            this.board.add(new Cetas(Game.width - 101+37,oy - 20));
         }
         this.board.remove(this);
@@ -730,6 +775,7 @@ Pelota_Poke.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -739,6 +785,7 @@ Pelota_Poke.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.goku.desvio.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
 }
@@ -778,20 +825,22 @@ Pelota_Flor.prototype.step = function(dt) {
       this.board.remove(this);
     }
 
-    if(this.y < 0) { this.y = 0, this.vy = -this.vy; }
+    if(this.y < 0) { this.y = 0, this.vy = -this.vy; if(Music.extension){Music.pelota.pop4.Miplay()};}
     else if(this.y > Game.height - this.h) { 
         this.y = Game.height - this.h
         this.vy = -this.vy;
+        if(Music.extension){Music.pelota.pop4.Miplay()};
         } 
     if(this.x < (0)) {
       this.x=0;
       this.vx=-this.vx;
-      
+      if(Music.extension){Music.pelota.pop4.Miplay()};
       if (this.vx<= this.maxVel){this.vx=this.vx*1.08};       
     }
 	  else if(this.x > Game.width - this.w) {  
       this.vx=-this.vx;
-      this.x= Game.width - this.w
+      this.x= Game.width - this.w;
+      if(Music.extension){Music.pelota.pop4.Miplay()};
 	    if (this.vx<= this.maxVel){this.vx=this.vx*1.08};  
 	  }
 
@@ -801,10 +850,12 @@ Pelota_Flor.prototype.step = function(dt) {
         var tablero = this.board;
         if (coll.sprite == "pala1A" || coll2.sprite =="pala2A" || coll2.sprite=="pala3A"){
           this.board.objects[0].maxVel=-this.board.objects[0].maxVel;
+          if(Music.extension){Music.grito.Miplay()}
           setTimeout(function(){tablero.objects[0].maxVel=-tablero.objects[0].maxVel;},7000);
         }
         else if(coll.sprite == "pala1B" || coll2.sprite =="pala2B"|| coll2.sprite=="pala3B"){
           this.board.objects[3].maxVel=-this.board.objects[3].maxVel;
+          if(Music.extension){Music.grito.Miplay()}
           setTimeout(function(){tablero.objects[3].maxVel=-tablero.objects[3].maxVel;},7000);
         };
         this.board.remove(this);
@@ -817,6 +868,7 @@ Pelota_Flor.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.pelota.pop5.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.05};
     }
     
@@ -826,6 +878,7 @@ Pelota_Flor.prototype.step = function(dt) {
         else{this.x=collision.x-this.w};
         this.vy = -this.vy;
         this.vx = -this.vx;
+        if(Music.extension){Music.goku.desvio.Miplay()};
         if (this.vx<= this.maxVel){this.vx=this.vx*1.08};
     }
 
@@ -918,11 +971,13 @@ var Snorlax = function(ox,oy){
         this.board.objects[0].y= this.y-100;
         this.board.objects[1].y= this.y-32;
         this.board.objects[2].y= this.y-132;
+        if(Music.extension){Music.snorlax.Miplay()}
     }
     if (this.x==0 && this.board.objects[0].y < this.y +this.h +32 && this.board.objects[0].y > this.y+this.h/2){
         this.board.objects[0].y= this.y+this.h+32;
         this.board.objects[1].y= this.y+this.h+100;
         this.board.objects[2].y= this.y+this.h;
+        if(Music.extension){Music.snorlax.Miplay()}
     }
     
     if (this.x==Game.width-this.w && this.board.objects[3].y > this.y-100 && this.board.objects[3].y < this.y+this.h/2){
@@ -930,11 +985,13 @@ var Snorlax = function(ox,oy){
         this.board.objects[3].y= this.y-100;
         this.board.objects[4].y= this.y-32;
         this.board.objects[5].y= this.y-132;
+        if(Music.extension){Music.snorlax.Miplay()}
     }
     if (this.x==Game.width-this.w && this.board.objects[3].y < this.y +this.h +32 && this.board.objects[3].y > this.y+this.h/2){
         this.board.objects[3].y= this.y+this.h+32;
         this.board.objects[4].y= this.y+this.h+100;
         this.board.objects[5].y= this.y+this.h;
+        if(Music.extension){Music.snorlax.Miplay()}
     }
     
 
@@ -982,6 +1039,7 @@ Explosion.prototype.step = function(dt) {
     this.frame = Math.floor(this.subFrame++ / 3);
     if(this.subFrame >= 36) {
 	this.board.remove(this);
+	if(Music.extension){Music.explosion.Miplay()}
     }
 }
 

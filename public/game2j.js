@@ -6,6 +6,7 @@
 var endGame1 = function(){
     if (Game.vidas>0){
       Game.vidas--;
+      if(Music.extension){Music.niveles.rewind.Miplay()}
       Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Perdiste!!! Prueba otra vez...", 
                                       "Te quedan "+ (Game.vidas+1) + " intentos",
                                       playGame1));
@@ -13,10 +14,13 @@ var endGame1 = function(){
       if (Game.dificultad>1){
         Game.dificultad-- ;
         Game.vidas++;
+        if(Music.extension){Music.niveles.bajar.Miplay()};    //SONIDO: bajar nivel
         Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Perdiste!!!", 
                                         "Has bajado un nivel",
                                         playGame1));
       }else{
+        if(Music.extension){Music.niveles.over.Miplay()};    //SONIDO: Fin del juego
+        if(Music.extension){Music.niveles.aplauso.Miplay()}
         Game.setBoard(2,new TitleScreen("aaayyy Inutil... \u00a1No pasas del nivel 1!", 
                                         "hay que entrenar un poquito",
                                         playMenu));
@@ -27,10 +31,12 @@ var nextLvl = function(){
     if (Game.dificultad<8){
       Game.dificultad++;
       Game.vidas++;
+      if(Music.extension){Music.niveles.subir.Miplay()};    //SONIDO: subir nivel
       Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Ganaste el nivel!!!", 
                                       "Aprieta espacio para pasar al siguiente!",
                                       playGame1));
     }else{
+      if(Music.extension){Music.niveles.winner.Miplay()};    //SONIDO: juego ganado
       Game.setBoard(2,new TitleScreen("\u00a1\u00a1\u00a1Campeon!!! \u00a1\u00a1\u00a1Ganaste!!!", 
                                       "\u00c9ste es tu tiempo: "+(Game.duracion-1),
                                       playMenu));
@@ -40,6 +46,12 @@ var nextLvl = function(){
 
 
 var playGame1 = function() {
+
+    if(!Music.menu.background.paused && Music.extension){
+                  Music.menu.background.pause();
+                  Music.menu.background.currentTime = 0};
+    if(Music.niveles.background.paused && Music.extension){Music.niveles.background.Miplay()};
+
 
     Game.setBoard(4,new GamePoints(0));
     Game.setBoard(3,new Reloj(false,Game.duracion));
@@ -56,6 +68,11 @@ var playGame1 = function() {
     board.add(new Pala1Maquina(40));
     board.add(new Pala2Maquina());
     board.add(new Pala3Maquina());
+    
+    
+     if(Music.extension){Music.niveles.pitido.Miplay()};    //SONIDO: PITIDO INICIAL
+    
+    
     switch(Game.dificultad){
         
         case 1:
@@ -85,7 +102,6 @@ var playGame1 = function() {
           board.add(new Pelota());
           break;
         case 6:
-          Game.vidas++;
           board.objects[3].factor=25;
           board.add(new Goku(0,3*Game.width/9,0));
           board.add(new Goku(0,7*Game.width/9,Game.height));
