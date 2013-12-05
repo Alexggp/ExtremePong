@@ -553,9 +553,7 @@ var Music = {
             this.init();
             
             
-            var rand = Math.random() < 0.5 ? 0 : 1;
-            if (rand){var sound1= "get_your_groove_on"; var sound2="emotional_orchestra"}
-            else{var sound2= "get_your_groove_on"; var sound1="emotional_orchestra"}
+
             
             
             this.niveles = {
@@ -566,7 +564,7 @@ var Music = {
                     winner:this.loadSound("winner"),
                     rewind:this.loadSound("cartoon_up"),
                     aplauso:this.loadSound("aplauso"),
-                    background:this.loadSound(sound1)
+                    background:this.loadSound("get_your_groove_on")
             },
             this.pelota = {
                     pop1:this.loadSound("pop"),
@@ -586,14 +584,13 @@ var Music = {
             this.explosion=this.loadSound("explosion");
             this.menu={
                     chmod:this.loadSound("opciones_menu"),
-                    background:this.loadSound(sound2)                 
+                    background:this.loadSound("emotional_orchestra")                 
             };
             
             
             this.menu.background.loop=true;
             this.niveles.background.loop=true;
-            if (rand){this.menu.background.volume=0.5}
-            else{this.niveles.background.volume=0.5};
+                        
         }
         
 }
