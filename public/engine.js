@@ -14,15 +14,20 @@ var Game = new function() {
 
     // Inicializa el juego
   this.initialize = function(canvasElementId,sprite_data,callback) {
-	    this.canvas = document.getElementById(canvasElementId)
-	    this.width = this.canvas.width;
-	    this.height= this.canvas.height;
+	      this.canvas = document.getElementById(canvasElementId);
+	      
+	      
+        this.width = this.canvas.width;
+        this.height= this.canvas.height;
 
-	    this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
-	    if(!this.ctx) { return alert("Please upgrade your browser to play"); }
+	      this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
+	      if(!this.ctx) { return alert("Please upgrade your browser to play"); }
+
+
+
 
 	    	// Propiedades para pantallas táctiles
-	      this.canvasMultiplier = 1;
+	      this.canvasMultiplier =1;
 	      this.playerOffset = 10;
         this.setupMobile();
 	      this.setupInput();
@@ -32,6 +37,29 @@ var Game = new function() {
 	      if(this.mobile) {
 	          this.setBoard(6,new TouchControlsMenu());
 	      }
+	      
+	              //canvas a tamaño de ventana
+
+	      else{
+	        this.canvasMultiplier = window.innerHeight/this.canvas.height;
+	        this.canvas.width  *= this.canvasMultiplier;
+          this.canvas.height *= this.canvasMultiplier;
+	        
+	        this.width = this.canvas.width;
+	        this.height= this.canvas.height;
+        }
+	      
+	      this.fullscreen= function(){
+           var el = document.getElementById(canvasElementId);
+ 
+           if(el.webkitRequestFullScreen) {
+               el.webkitRequestFullScreen();
+           }
+          else {
+             el.mozRequestFullScreen();
+          }            
+        }
+	      this.canvas.addEventListener("click",Game.fullscreen)
 
 	    this.loop(); 
 	    
@@ -42,7 +70,7 @@ var Game = new function() {
    };
 
     // Gestión de la entrada (teclas para izda/derecha y disparo)
-    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda',27:'esc',77:'mute' };  
+    var KEY_CODES = { 38:'up2', 40:'down2', 87:'up1', 83:'down1', 32 :'fire', 39:'dcha', 37:'izda',81:'esc',77:'mute' };  
     this.keys = {};
 
     this.setupInput = function() {
@@ -86,31 +114,45 @@ var Game = new function() {
    
    
    this.setupMobile = function() {
-	    var container = document.getElementById("container"),
-              // Comprobar si el browser soporta eventos táctiles
-              hasTouch =  !!('ontouchstart' in window),
-	      // Ancho y alto de la ventana del browser
-              w = window.innerWidth, h = window.innerHeight;
+ 	      var container = document.getElementById("container"),
+            // Comprobar si el browser soporta eventos táctiles
+            hasTouch =  !!('ontouchstart' in window),
+      // Ancho y alto de la ventana del browser
+            w = window.innerWidth, h = window.innerHeight;
 
-	    if(hasTouch) { this.mobile = true; }
+	      if(hasTouch) { this.mobile = true; }
 
-	    // Salir si la pantalla es mayor que cierto tamaño máximo o si no
-	    // tiene soporte para eventos táctiles
-	    if(screen.width >= 1280 || !hasTouch) { return false; }
+	      // Salir si la pantalla es mayor que cierto tamaño máximo o si no
+	      // tiene soporte para eventos táctiles
+	      if(screen.width >= 1280 || !hasTouch) { return false; }
+        
+        if (w<h){
+          	      //  Poner el canvas en una posición absoluta en la esquina
+	        //  superior izquierda de la ventana
+	        this.canvas.style.position='absolute';
+	        this.canvas.style.left="0px";
+	        this.canvas.style.top="0px";
+          this.canvasMultiplier=w/this.canvas.width;
+        }
+        else{
+          this.canvasMultiplier=h/this.canvas.height;
+        } 
+        this.canvas.width=this.width*this.canvasMultiplier;
+        this.width=this.canvas.width;
+        
+        this.canvas.height=this.height*this.canvasMultiplier;
+        this.height=this.canvas.height;
+        
+          
 
-	    // Comprobar si el usuario está en modo landscape
-	    // Si no lo está, pedirle que rote el dispositivo 
-	    if(w > h) {
-	        alert("Please rotate the device and then click OK");
-	        w = window.innerWidth; h = window.innerHeight;
-	    }
 
-	  
-	    //  Poner el canvas en una posición absoluta en la esquina
-	    //  superior izquierda de la ventana
-	    this.canvas.style.position='absolute';
-	    this.canvas.style.left="0px";
-	    this.canvas.style.top="0px";
+	      // Desplazar la ventana mínimamente para forzar a que desaparezca
+	      // la barra de dirección del navegador
+	     window.scrollTo(0,3);
+
+
+
+
 
     };
    
@@ -138,7 +180,7 @@ var SpriteSheet = new function() {
                         s.sy, 
                         s.w, s.h, 
                         Math.floor(x), Math.floor(y),
-                        s.w, s.h);
+                        s.w*Game.canvasMultiplier, s.h*Game.canvasMultiplier);
     };
 }
 
@@ -268,7 +310,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         
         
         ctx.font = "20px";
-        ctx.fillText("Esc para volver al men\u00Fa",80,20);
+        ctx.fillText("Q para volver al men\u00Fa",80,20);
         
         
         ctx.textAlign = "center";
@@ -818,5 +860,8 @@ var TouchControlsGame = function() {
     Game.canvas.addEventListener('touchend',this.trackTouch,true);
 
 };
+
+
+ 
 
 
