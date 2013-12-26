@@ -22,7 +22,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-	background-color:#101010  ;
+	background-color:black ;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -57,5 +57,5 @@ table {
 
 /* Give canvas a background */
 canvas {
-  background-color:black;
+  background-color:#101010 ;
 }

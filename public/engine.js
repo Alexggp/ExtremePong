@@ -35,12 +35,14 @@ var Game = new function() {
 	      // Añadimos como un nuevo tablero al juego el panel con los
 	      // botones para pantalla táctil
 	      if(this.mobile) {
+	          alert("Desliza el dedo por la parte superior de la pantalla para activar la pantalla completa");
 	          this.setBoard(6,new TouchControlsMenu());
 	      }
 	      
 	              //canvas a tamaño de ventana
 
 	      else{
+	        alert("Haz doble click en la pantalla para activar la pantalla completa");
 	        this.canvasMultiplier = window.innerHeight/this.canvas.height;
 	        this.canvas.width  *= this.canvasMultiplier;
           this.canvas.height *= this.canvasMultiplier;
@@ -59,7 +61,9 @@ var Game = new function() {
              el.mozRequestFullScreen();
           }            
         }
-	      this.canvas.addEventListener("click",Game.fullscreen)
+	      this.canvas.addEventListener("dblclick",Game.fullscreen);
+
+	      
 
 	    this.loop(); 
 	    
@@ -125,33 +129,35 @@ var Game = new function() {
 	      // Salir si la pantalla es mayor que cierto tamaño máximo o si no
 	      // tiene soporte para eventos táctiles
 	      if(screen.width >= 1280 || !hasTouch) { return false; }
+	      
+	      
         
-        if (w<h){
           	      //  Poner el canvas en una posición absoluta en la esquina
 	        //  superior izquierda de la ventana
-	        this.canvas.style.position='absolute';
-	        this.canvas.style.left="0px";
-	        this.canvas.style.top="0px";
+        
+        if (w<h){
+        
+          this.canvas.style.position='absolute';
+          this.canvas.style.left="0px";
+          this.canvas.style.top="0px";
           this.canvasMultiplier=w/this.canvas.width;
+          
+          this.canvas.width=this.width*this.canvasMultiplier;
+          this.width=this.canvas.width;
+        
+          this.canvas.height=this.height*this.canvasMultiplier;
+          this.height=this.canvas.height;
+          
+          
         }
         else{
-          this.canvasMultiplier=h/this.canvas.height;
-        } 
-        this.canvas.width=this.width*this.canvasMultiplier;
-        this.width=this.canvas.width;
-        
-        this.canvas.height=this.height*this.canvasMultiplier;
-        this.height=this.canvas.height;
-        
+          this.canvasMultiplier=w/this.canvas.width;
+          this.canvas.height=h;
+          this.canvas.width=w;
+          Game.width=this.canvas.width;
+          Game.height=this.canvas.height;
           
-
-
-	      // Desplazar la ventana mínimamente para forzar a que desaparezca
-	      // la barra de dirección del navegador
-	     window.scrollTo(0,3);
-
-
-
+        }
 
 
     };
@@ -539,7 +545,7 @@ var capaClear = function() {
     var capaCtx = capa.getContext("2d");
 
  
-	  capaCtx.fillStyle = "#000";
+	  capaCtx.fillStyle = "#101010";
 	  capaCtx.fillRect(0,0,capa.width,capa.height);
 	
     
@@ -688,7 +694,7 @@ var TouchControlsMenu = function() {
     
     
     var unitWidth = Game.width/10;
-
+    
     // Separación entre columnas
     var gutterWidth = 10;
 
@@ -755,7 +761,16 @@ var TouchControlsMenu = function() {
 	      e.preventDefault();
 	      
 
+	      if (e.type == 'touchmove'){
+	       for(var i=0;i<e.targetTouches.length;i++) {
+	          touch = e.targetTouches[i];
+
+	          y = touch.pageY / Game.canvasMultiplier;
+	          
+	          if (y < Game.height/9){Game.fullscreen()}
 	      
+	        }
+	      }
 
 	      // Detección de eventos sobre franja de la derecha: disparo
 	      if(e.type == 'touchstart' || e.type == 'touchend') {
@@ -771,7 +786,7 @@ var TouchControlsMenu = function() {
 		          y = touch.pageY / Game.canvasMultiplier;
 		          
 		          if(x > unitWidth && x < 2 * unitWidth && y > (Game.height-unitWidth)) {
-		              Game.keys['esc'] = (e.type == 'touchstart'); 
+		              Game.keys['esc'] = (e.type == 'touchstart');
 		          }
 		          else if(x > 3 * unitWidth && x < 4 * unitWidth && y > (Game.height- unitWidth) ) {
 		              Game.keys['izda'] = (e.type == 'touchstart'); 
@@ -797,7 +812,6 @@ var TouchControlsMenu = function() {
     Game.canvas.addEventListener('touchstart',this.trackTouch,true);
     Game.canvas.addEventListener('touchmove',this.trackTouch,true);
     Game.canvas.addEventListener('touchend',this.trackTouch,true);
-
 
 };
 
