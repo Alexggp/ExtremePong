@@ -152,11 +152,10 @@ var Game = new function() {
         }
         else{
           this.canvasMultiplier=w/this.canvas.width;
-          this.canvas.height=h;
+          this.canvas.height=h*1.2;
           this.canvas.width=w;
           Game.width=this.canvas.width;
           Game.height=this.canvas.height;
-          
         }
 
 
