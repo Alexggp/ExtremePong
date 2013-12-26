@@ -39,6 +39,10 @@ var playMenu =function(){
     Game.points1=undefined;
     Game.points2=undefined;
     Game.boards=[];
+    if(Game.mobile) {
+	    Game.setBoard(6,new TouchControlsMenu());
+	  }
+   
     Game.dificultad=1;
     Game.setBoard(5,new MuteScreen());
     Game.setBoard(0,new capaClear());
@@ -80,6 +84,11 @@ var OBJETO_PALA1        =   1,
 
 
 var endGame = function(){
+
+    if(Game.mobile) {
+	    Game.setBoard(6,new TouchControlsMenu());
+	  }
+
     if(Music.extension){Music.niveles.aplauso.Miplay()}
     Game.setBoard(2,new TitleScreen("Fin del juego!!!!", 
                                     "Aprieta espacio para jugar otra vez!",
@@ -87,6 +96,10 @@ var endGame = function(){
 }
 
 var playGame = function() {
+
+    if(Game.mobile) {
+	    Game.setBoard(6,new TouchControlsGame());
+	  }
 
     if(!Music.menu.background.paused && Music.extension){
               Music.menu.background.pause();

@@ -5,6 +5,7 @@
 
 var Game = new function() { 
     
+    
     this.segundos=60;
     this.duracion= this.segundos*1000;
     this.dificultad=1;   
@@ -20,7 +21,17 @@ var Game = new function() {
 	    this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
 	    if(!this.ctx) { return alert("Please upgrade your browser to play"); }
 
-	    this.setupInput();
+	    	// Propiedades para pantallas táctiles
+	      this.canvasMultiplier = 1;
+	      this.playerOffset = 10;
+        this.setupMobile();
+	      this.setupInput();
+
+	      // Añadimos como un nuevo tablero al juego el panel con los
+	      // botones para pantalla táctil
+	      if(this.mobile) {
+	          this.setBoard(6,new TouchControlsMenu());
+	      }
 
 	    this.loop(); 
 	    
@@ -35,19 +46,19 @@ var Game = new function() {
     this.keys = {};
 
     this.setupInput = function() {
-	$(window).keydown(function(event){
-	    if (KEY_CODES[event.which]) {
-		Game.keys[KEY_CODES[event.which]] = true;
-		return false;
-	    }
-	});
+	    $(window).keydown(function(event){
+	        if (KEY_CODES[event.which]) {
+		    Game.keys[KEY_CODES[event.which]] = true;
+		    return false;
+	        }
+	    });
 	
-	$(window).keyup(function(event){
-	    if (KEY_CODES[event.which]) {
-		Game.keys[KEY_CODES[event.which]] = false;
-		return false;
-	    }
-	});
+	    $(window).keyup(function(event){
+	        if (KEY_CODES[event.which]) {
+		    Game.keys[KEY_CODES[event.which]] = false;
+		    return false;
+	        }
+	    });
 	
     }
 
@@ -56,22 +67,54 @@ var Game = new function() {
     this.boards = [];
 
     this.loop = function() { 
-	// segundos transcurridos
-	var dt = 1/10;
+	    // segundos transcurridos
+	    var dt = 1/10;
 
-	// Para cada board, de 0 en adelante, se 
-	// llama a su método step() y luego a draw()
-	for(var i=0,len = Game.boards.length;i<len;i++) {
-	    if(Game.boards[i]) { 
-		Game.boards[i].step(dt);
-		Game.boards[i].draw(Game.ctx);
+	    // Para cada board, de 0 en adelante, se 
+	    // llama a su método step() y luego a draw()
+	    for(var i=0,len = Game.boards.length;i<len;i++) {
+	        if(Game.boards[i]) { 
+		    Game.boards[i].step(dt);
+		    Game.boards[i].draw(Game.ctx);
+	        }
 	    }
-	}
 
-	setTimeout(Game.loop,30);
+	    setTimeout(Game.loop,30);
     };
     
    this.setBoard = function(num,board) { this.boards[num] = board; };
+   
+   
+   this.setupMobile = function() {
+	    var container = document.getElementById("container"),
+              // Comprobar si el browser soporta eventos táctiles
+              hasTouch =  !!('ontouchstart' in window),
+	      // Ancho y alto de la ventana del browser
+              w = window.innerWidth, h = window.innerHeight;
+
+	    if(hasTouch) { this.mobile = true; }
+
+	    // Salir si la pantalla es mayor que cierto tamaño máximo o si no
+	    // tiene soporte para eventos táctiles
+	    if(screen.width >= 1280 || !hasTouch) { return false; }
+
+	    // Comprobar si el usuario está en modo landscape
+	    // Si no lo está, pedirle que rote el dispositivo 
+	    if(w > h) {
+	        alert("Please rotate the device and then click OK");
+	        w = window.innerWidth; h = window.innerHeight;
+	    }
+
+	  
+	    //  Poner el canvas en una posición absoluta en la esquina
+	    //  superior izquierda de la ventana
+	    this.canvas.style.position='absolute';
+	    this.canvas.style.left="0px";
+	    this.canvas.style.top="0px";
+
+    };
+   
+   
 };
 
 
@@ -598,6 +641,182 @@ var Music = {
 
 
 
+var TouchControlsMenu = function() {
 
+    
+    
+    var unitWidth = Game.width/10;
+
+    // Separación entre columnas
+    var gutterWidth = 10;
+
+    // Ancho de cada columna
+    var blockWidth = unitWidth-gutterWidth;
+
+    // Dibuja un rectángulo con un carácter dentro. Usado para representar
+    // los botones. 
+    // Los botones de las flechas izquierda y derecha usan los
+    // caracteres Unicode UTF-8 \u25C0 y \u25B6 respectivamente, que
+    // corresponden a sendos triángulos
+    this.drawSquare = function(ctx,x,y,txt,on) {
+	    // Usamos un nivel de opacidad del fondo (globalAlpha)
+	    // diferente para que cambie la apariencia del botón en
+	    // función de si está presionado (opaco) o no (más
+	    // transparente)
+	    //ctx.globalAlpha = on ? 0.9 : 0.6;
+        ctx.globalAlpha = 0;
+	      //ctx.fillStyle =  "#CCC";
+	      ctx.fillRect(x,y,blockWidth,blockWidth);
+
+	      ctx.fillStyle = "#FFF";
+	      ctx.textAlign = "center";
+	      ctx.globalAlpha = 1.0;
+	      var tFuente = on ? (3*unitWidth/4)+4 : (3*unitWidth/4);
+	      ctx.font = "bold "+ tFuente + "px arial";
+	      
+
+
+	    ctx.fillText(txt, 
+                         x+blockWidth/2,
+                         y+3*blockWidth/4+5);
+    };
+
+
+
+    this.draw = function(ctx) {
+	      // Guarda las propiedades del contexto actual para evitar que
+	      // los siguientes cambios que se hacen a la opacidad del fondo
+	      // y al font dentro de drawSquare() afecten a otras llamadas
+	      // del canvas
+	      ctx.save();
+
+	      var yLoc = Game.height - unitWidth;
+	      this.drawSquare(ctx,unitWidth,yLoc,"\u2718", Game.keys['esc']);
+	      this.drawSquare(ctx,3*unitWidth,yLoc,"\u25C0", Game.keys['izda']);
+	      this.drawSquare(ctx,4*unitWidth,yLoc,"\u25B2", Game.keys['up2']);
+	      this.drawSquare(ctx,5*unitWidth,yLoc,"\u25Bc", Game.keys['down2']);
+	      this.drawSquare(ctx,6*unitWidth,yLoc,"\u25B6", Game.keys['dcha']);
+	      this.drawSquare(ctx,8*unitWidth,yLoc,"\u2714",Game.keys['fire']);
+
+	      // Recupera el estado salvado al principio del método
+	      ctx.restore();
+    };
+
+    this.step = function(dt) { };
+
+    // Manejador para eventos de la pantalla táctil
+    this.trackTouch = function(e) {
+	      var touch, x, y;
+	
+	      // Elimina comportamiento por defecto para este evento, como
+	      // scrolling, clicking, zooming, etc.
+	      e.preventDefault();
+	      
+
+	      
+
+	      // Detección de eventos sobre franja de la derecha: disparo
+	      if(e.type == 'touchstart' || e.type == 'touchend') {
+	          for(i=0;i<e.changedTouches.length;i++) {
+		          // Sólo consideramos dedos que han intervenido en el
+		          // evento actual (touchstart o touchend), por lo que 
+                          // miramos en changedTouches
+		          touch = e.changedTouches[i];
+
+		          // Al fijarnos sólo en las coordenadas X hacemos que toda
+		          // la franja vertical de cada botón sea activa.
+		          x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
+		          y = touch.pageY / Game.canvasMultiplier;
+		          
+		          if(x > unitWidth && x < 2 * unitWidth && y > (Game.height-unitWidth)) {
+		              Game.keys['esc'] = (e.type == 'touchstart'); 
+		          }
+		          else if(x > 3 * unitWidth && x < 4 * unitWidth && y > (Game.height- unitWidth) ) {
+		              Game.keys['izda'] = (e.type == 'touchstart'); 
+		          }
+		          else if(x > 4 * unitWidth && x < 5 * unitWidth && y > (Game.height- unitWidth)) {
+		              Game.keys['up2'] = (e.type == 'touchstart'); 
+		          }
+		          else if(x > 5 * unitWidth && x < 6 * unitWidth && y > (Game.height- unitWidth)) {
+		              Game.keys['down2'] = (e.type == 'touchstart'); 
+		          }
+		          else if(x > 6 * unitWidth && x < 7 * unitWidth && y > (Game.height- unitWidth)) {
+		              Game.keys['dcha'] = (e.type == 'touchstart'); 
+		          }
+		          else if(x > 8 * unitWidth && x < 9 * unitWidth && y > (Game.height- unitWidth)) {
+		              Game.keys['fire'] = (e.type == 'touchstart'); 
+		          }
+	         }
+	      }
+    };
+
+    // Registra los manejadores para los eventos táctiles asociados al
+    // elemento Game.canvas del DOM
+    Game.canvas.addEventListener('touchstart',this.trackTouch,true);
+    Game.canvas.addEventListener('touchmove',this.trackTouch,true);
+    Game.canvas.addEventListener('touchend',this.trackTouch,true);
+
+
+};
+
+
+var TouchControlsGame = function() {
+
+    
+
+    var unitWidth = Game.width/3;
+    var unitHeight = Game.height/2;
+
+
+
+
+    this.step = function(dt) { };
+    this.draw = function(ctx){};
+
+    // Manejador para eventos de la pantalla táctil
+    this.trackTouch = function(e) {
+	      var touch, x,y;
+	
+	      // Elimina comportamiento por defecto para este evento, como
+	      // scrolling, clicking, zooming, etc.
+	      e.preventDefault();
+
+	      
+	      Game.keys['up1'] = false;
+	      Game.keys['down1'] = false;
+	      Game.keys['up2'] = false;
+	      Game.keys['down2'] = false;
+
+	      for(var i=0;i<e.targetTouches.length;i++) {
+	          touch = e.targetTouches[i];
+
+	          
+	          x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
+	          y = touch.pageY / Game.canvasMultiplier;
+	          
+	          if(x < unitWidth && y < unitHeight) {
+		           Game.keys['up1'] = true;
+	          } 
+	          
+	          if(x < unitWidth && y > unitHeight) {
+		           Game.keys['down1'] = true;
+	          }
+	          if(x > 2 *unitWidth && y < unitHeight) {
+		           Game.keys['up2'] = true;
+	          } 
+	          if(x > 2 *unitWidth && y > unitHeight) {
+		           Game.keys['down2'] = true;
+	          } 
+	      }
+	      
+    };
+
+    // Registra los manejadores para los eventos táctiles asociados al
+    // elemento Game.canvas del DOM
+    Game.canvas.addEventListener('touchstart',this.trackTouch,true);
+    Game.canvas.addEventListener('touchmove',this.trackTouch,true);
+    Game.canvas.addEventListener('touchend',this.trackTouch,true);
+
+};
 
 

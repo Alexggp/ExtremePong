@@ -4,6 +4,9 @@
 */
 
 var endGame1 = function(){
+    if(Game.mobile) {
+	    Game.setBoard(6,new TouchControlsMenu());
+	  }
     if (Game.vidas>0){
       Game.vidas--;
       if(Music.extension){Music.niveles.rewind.Miplay()}
@@ -28,6 +31,9 @@ var endGame1 = function(){
     }
 }
 var nextLvl = function(){
+    if(Game.mobile) {
+	    Game.setBoard(6,new TouchControlsMenu());
+	  }
     if (Game.dificultad<8){
       Game.dificultad++;
       Game.vidas++;
@@ -46,6 +52,10 @@ var nextLvl = function(){
 
 
 var playGame1 = function() {
+    
+    if(Game.mobile) {
+	    Game.setBoard(6,new TouchControlsGame());
+	  }
 
     if(!Music.menu.background.paused && Music.extension){
                   Music.menu.background.pause();
