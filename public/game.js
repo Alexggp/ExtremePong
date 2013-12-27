@@ -271,7 +271,7 @@ var Pala1PlayerB = function() { //Parte central de la pala derecha
   this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
   this.reload = this.reloadTime;
-  this.x = Game.width - 10 - this.w;
+  this.x = Game.canvas.width - 10 - this.w;
   this.y = Game.height/2 - this.h/2;
 
   this.step = function(dt) {

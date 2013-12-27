@@ -16,6 +16,10 @@ var Game = new function() {
   this.initialize = function(canvasElementId,sprite_data,callback) {
 	      this.canvas = document.getElementById(canvasElementId);
 	      
+	      //salvamos el valor del canvas original para poder referenciarlo al llamar 
+	      //sucesivamente a Game.setupMobile()
+	      this.canvasOriginalwidth=this.canvas.width;
+	      this.canvasOriginalheight=this.canvas.height;
 	      
         this.width = this.canvas.width;
         this.height= this.canvas.height;
@@ -60,6 +64,7 @@ var Game = new function() {
           else {
              el.mozRequestFullScreen();
           }            
+          this.setupMobile();
         }
 	      this.canvas.addEventListener("dblclick",Game.fullscreen);
 
@@ -118,6 +123,9 @@ var Game = new function() {
    
    
    this.setupMobile = function() {
+
+        this.canvas.width=this.canvasOriginalwidth;
+	      this.canvas.height=this.canvasOriginalheight;
  	      var container = document.getElementById("container"),
             // Comprobar si el browser soporta eventos táctiles
             hasTouch =  !!('ontouchstart' in window),
@@ -132,33 +140,30 @@ var Game = new function() {
 	      
 	      
         
-          	      //  Poner el canvas en una posición absoluta en la esquina
-	        //  superior izquierda de la ventana
-        
         if (w<h){
-        
           this.canvas.style.position='absolute';
           this.canvas.style.left="0px";
           this.canvas.style.top="0px";
           this.canvasMultiplier=w/this.canvas.width;
           
-          this.canvas.width=this.width*this.canvasMultiplier;
+          this.canvas.width=this.canvas.width*this.canvasMultiplier;
           this.width=this.canvas.width;
         
-          this.canvas.height=this.height*this.canvasMultiplier;
+          this.canvas.height=this.canvas.height*this.canvasMultiplier;
           this.height=this.canvas.height;
           
           
         }
         else{
+         
           this.canvasMultiplier=w/this.canvas.width;
-          this.canvas.height=h*1.2;
-          this.canvas.width=w;
-          Game.width=this.canvas.width;
-          Game.height=this.canvas.height;
+          this.canvas.height=this.canvas.height*h/this.canvas.height;
+          this.canvas.width=this.canvas.width*h/this.canvas.height;
+          this.width=this.canvas.width;
+          this.height=this.canvas.height;
         }
 
-
+          this.setBoard(0,new capaClear());
     };
    
    
@@ -274,10 +279,10 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
         if(!Game.keys['up2']) upup = true;
         if(!Game.keys['dcha']) updcha = true;
         if(!Game.keys['izda']) upizda = true;
-        if(!Game.keys['esc']) upizda = true;
+        if(!Game.keys['esc']) upesc= true;
         
         if (up && Game.keys['fire'] && callback) callback();
-        if (up && Game.keys['esc']){
+        if (upesc && Game.keys['esc']){
                 if(Music.extension){Music.menu.chmod.Miplay()}
                 playMenu();
             
@@ -295,6 +300,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
             if(Music.extension){Music.pelota.pop3.Miplay()}
         }
         if (updcha && Game.keys['dcha'] && Game.segundos<120 && Game.jugadores==2){
+            console.log(updcha);
             Game.segundos+=30;
             Game.duracion= Game.segundos*1000;
             updcha= false;
@@ -811,6 +817,17 @@ var TouchControlsMenu = function() {
     Game.canvas.addEventListener('touchstart',this.trackTouch,true);
     Game.canvas.addEventListener('touchmove',this.trackTouch,true);
     Game.canvas.addEventListener('touchend',this.trackTouch,true);
+    
+    
+    //Listener para detectar cuando cambiamos la orientacion de la pantalla
+    var supportsOrientationChange = "onorientationchange" in window,
+    orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
+
+    window.addEventListener(orientationEvent, function() {
+        Game.setupMobile();
+    }, false);
+   
+    
 
 };
 
@@ -865,6 +882,7 @@ var TouchControlsGame = function() {
 	      }
 	      
     };
+    
 
     // Registra los manejadores para los eventos táctiles asociados al
     // elemento Game.canvas del DOM

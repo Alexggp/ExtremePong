@@ -131,7 +131,7 @@ var playGame1 = function() {
 
    }
     for (var i =0;i<Game.vidas;i++){
-      board.add(new Corazon(Game.width-35 -35*i, Game.height-32,0));
+      board.add(new Corazon(Game.canvas.width-35 -35*i, Game.canvas.height-32,0));
     }
     Game.setBoard(2,board);
     
@@ -143,7 +143,7 @@ var Pala1Maquina = function(factor) { //Parte central de la pala derecha
     this.setup('pala1B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
-    this.x = Game.width - 10 - this.w;
+    this.x = Game.canvas.width - 10 - this.w;
     this.y = Game.height/2 - this.h/2;
     
     this.factor =factor;
@@ -203,7 +203,7 @@ var Pala2Maquina = function() { //Parte de abajo de la pala derecha
     this.setup('pala2B', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
-    this.x = Game.width - 10 - this.w;
+    this.x = Game.canvas.width - 10 - this.w;
     this.y = Game.height/2 + 100/2 - this.h/2;
 
     this.step = function(dt) {
