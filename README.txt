@@ -72,3 +72,35 @@ Para partidas 1 jugador, ambos controles mueven la pala.
       
         Se selecciona en la pantalla principal, pulsando derecha o izquierda en el teclado.
         Duraciones (en segundos): 30, 60, 90 y 120.
+        
+        
+FUNCIONALIDAD TÁCTIL
+====================
+
+Incluye funcionalidad táctil para poder ser jugado tanto en moviles como tablets. (De momento testado
+para Nexus7)
+
+Para moverse por el menú tocar las flechas de dirección así como botones adicionales. A la hora de jugar, 
+las palas responden al tocar la parte inferior o superior de la pantalla del lado de la pantalla correspondiente 
+a la pala que se pretende accionar. NO FUNCIONA ARRASTRANDO LA PALA, ya que la velocidad de arrastrado es irregular 
+y las palas se mueven con una velocidad constante. 
+
+Cada vez que se realiza un reajuste de pantalla el juego saldrá al menú principal. 
+
+
+
+PANTALLA COMPLETA
+=================
+
+Haciendo doble click con el ratón dentro del rectángulo de juego. En pantallas táctiles, deslizando el dedo por la
+mitad horizontal del borde superior de la pantalla. 
+
+
+
+
+
+
+
+
+
+

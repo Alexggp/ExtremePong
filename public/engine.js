@@ -4,16 +4,18 @@
 */
 
 var Game = new function() { 
-    
-    
-    this.segundos=60;
-    this.duracion= this.segundos*1000;
-    this.dificultad=1;   
-    this.jugadores=1;   
-    this.vidas=3;                                                        
+                                                          
 
     // Inicializa el juego
   this.initialize = function(canvasElementId,sprite_data,callback) {
+  
+      this.segundos=60;
+      this.duracion= this.segundos*1000;
+      this.dificultad=1;   
+      this.jugadores=1;   
+      this.vidas=3;   
+  
+  
 	      this.canvas = document.getElementById(canvasElementId);
 	      
 	      //salvamos el valor del canvas original para poder referenciarlo al llamar 
@@ -65,6 +67,7 @@ var Game = new function() {
              el.mozRequestFullScreen();
           }            
           this.setupMobile();
+          if(this.mobile){playMenu()};
         }
 	      this.canvas.addEventListener("dblclick",Game.fullscreen);
 
@@ -155,7 +158,8 @@ var Game = new function() {
           
         }
         else{
-         
+          this.canvas.style.position='relative';
+
           this.canvasMultiplier=w/this.canvas.width;
           this.canvas.height=this.canvas.height*h/this.canvas.height;
           this.canvas.width=this.canvas.width*h/this.canvas.height;
@@ -769,10 +773,10 @@ var TouchControlsMenu = function() {
 	      if (e.type == 'touchmove'){
 	       for(var i=0;i<e.targetTouches.length;i++) {
 	          touch = e.targetTouches[i];
-
+            x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
 	          y = touch.pageY / Game.canvasMultiplier;
 	          
-	          if (y < Game.height/9){Game.fullscreen()}
+	          if (x>Game.width/3 && x<2*Game.width/3 && y < Game.height/9){Game.fullscreen()}
 	      
 	        }
 	      }
@@ -825,6 +829,7 @@ var TouchControlsMenu = function() {
 
     window.addEventListener(orientationEvent, function() {
         Game.setupMobile();
+        playMenu();
     }, false);
    
     
