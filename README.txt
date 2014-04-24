@@ -5,6 +5,9 @@ El clásico juego de palas llevado al extremo.
 Mide tus habilidades contra la máquina en el modo arcade, o enfrentate a un amigo en un modo de dos jugadores 
 lleno de sorpresas y posibilidades. 
 
+PRUÉBALO!!!!
+http://watson.gsyc.es/~alexggp/ExtremePong/public/index.html
+
 
 
 JUGAR
